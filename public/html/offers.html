@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offers & Coupons - TravelEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dark: #d97706;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --text-dark: var(--text-primary);
+  --border: var(--border-light);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: var(--font-size-base); line-height: 1.6; color: var(--text-primary); background: var(--bg-secondary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+input, textarea, select { font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: var(--font-size-sm); font-weight: 500; border-radius: var(--radius-lg); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--text-white); box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn-lg { padding: 1rem 2rem; font-size: var(--font-size-lg); border-radius: var(--radius-xl); }
+.btn-sm { padding: 0.5rem 1rem; font-size: var(--font-size-xs); }
+.btn-accent { background: var(--accent); color: var(--text-white); }
+.btn-accent:hover:not(:disabled) { background: var(--accent-dark); }
+
+.page-fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Dashboard styles */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 280px 1fr;
+}
+
+.dashboard-header {
+  grid-area: header;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 1.5rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-bar input {
+  width: 320px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--danger);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+  background: var(--gray-100);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.5rem 0;
+}
+
+.logout-btn {
+  color: var(--danger);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-light);
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  position: sticky;
+  top: 70px;
+}
+
+.sidebar-content {
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-xl);
+  margin-bottom: 2rem;
+}
+
+.user-avatar-large {
+  position: relative;
+}
+
+.user-avatar-large img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+.status-indicator.online {
+  background: var(--success);
+}
+
+.user-info h3 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.user-status {
+  font-size: var(--font-size-xs);
+  color: var(--accent);
+  font-weight: 500;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nav-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-item i {
+  width: 20px;
+  font-size: 1.125rem;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--gray-300);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.nav-item.active .nav-badge {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-badge.new {
+  background: var(--accent);
+}
+
+.main-content {
+  grid-area: main;
+  padding: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.content-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.header-actions-mobile {
+  display: none;
+}
+
+/* Offers Categories */
+.offers-categories {
+  margin-bottom: 32px;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.category-tab {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 25px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.category-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.category-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+/* Featured Banner */
+.featured-banner {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 40px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+  opacity: 0.3;
+}
+
+.banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.banner-text {
+  flex: 1;
+}
+
+.banner-tag {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.banner-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.banner-content p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.banner-timer {
+  display: flex;
+  gap: 16px;
+  margin-left: 40px;
+}
+
+.timer-item {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px 12px;
+  min-width: 70px;
+}
+
+.timer-value {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.timer-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Offers Section */
+.offers-section {
+  margin-top: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.section-title {
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-options {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-select {
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: white;
+}
+
+/* Offers Grid */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.offer-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.offer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.offer-header {
+  position: relative;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+}
+
+.offer-discount {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--accent);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.offer-title {
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-right: 80px;
+}
+
+.offer-category {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.offer-content {
+  padding: 0 24px 24px;
+}
+
+.offer-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.offer-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.offer-feature {
+  background: rgba(255, 107, 0, 0.1);
+  color: var(--accent);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.offer-validity {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.offer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.offer-code {
+  background: #f8f9fa;
+  border: 2px dashed var(--border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.claim-offer-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.claim-offer-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+}
+
+/* Category specific styles */
+.offer-card[data-category="flights"] .offer-header {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+.offer-card[data-category="hotels"] .offer-header {
+  background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+}
+
+.offer-card[data-category="packages"] .offer-header {
+  background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+}
+
+.offer-card[data-category="limited"] .offer-header {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+}
+
+.offer-card[data-category="limited"] {
+  border: 2px solid var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-wrapper {
+    grid-template-columns: 240px 1fr;
+  }
+  
+  .search-bar input {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    grid-template-areas:
+      "header"
+      "main";
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  .search-bar {
+    display: none;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .header-actions-mobile {
+    display: block;
+  }
+  
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .category-tab {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  
+  .banner-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .banner-timer {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .offer-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .offer-code {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .user-menu-trigger span {
+    display: none;
+  }
+}
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-wrapper page-fade-in">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="brand">
+          <img src="../assets/images/img2.webp" alt="TravelEase" class="brand-logo">
+          <span class="brand-name">TravelEase</span>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search offers, deals...">
+        </div>
+        
+        <div class="header-actions">
+          <button class="icon-btn notifications-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          
+          <div class="user-menu">
+            <button class="user-menu-trigger">
+              <img id="userAvatar" src="../assets/images/Yash.jpg" alt="Avatar" class="user-avatar">
+              <span id="username">Yash Mittal</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown">
+              <a href="profile.html" class="dropdown-item">
+                <i class="fas fa-user"></i> Profile
+              </a>
+              <a href="wallet.html" class="dropdown-item">
+                <i class="fas fa-wallet"></i> Wallet
+              </a>
+              <div class="dropdown-divider"></div>
+              <button id="logoutBtn" class="dropdown-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-user">
+          <div class="user-avatar-large">
+            <img id="sidebarAvatar" src="../assets/images/Yash.jpg" alt="Avatar">
+            <div class="status-indicator online"></div>
+          </div>
+          <div class="user-info">
+            <h3 id="sidebarUsername">Yash Mittal</h3>
+            <p class="user-status">Premium Member</p>
+          </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="dashboard.html" class="nav-item">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Booking</span>
+            <a href="flights.html" class="nav-item">
+              <i class="fas fa-plane-departure"></i>
+              <span>Flights</span>
+              <span class="nav-badge">2</span>
+            </a>
+            <a href="hotels.html" class="nav-item">
+              <i class="fas fa-bed"></i>
+              <span>Hotels</span>
+            </a>
+            <a href="packages.html" class="nav-item">
+              <i class="fas fa-suitcase"></i>
+              <span>Packages</span>
+              <span class="nav-badge new">New</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Account</span>
+            <a href="offers.html" class="nav-item active">
+              <i class="fas fa-percent"></i>
+              <span>Offers</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+              <i class="fas fa-wallet"></i>
+              <span>Wallet</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+              <i class="fas fa-user-cog"></i>
+              <span>Settings</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-header">
+        <div class="page-title">
+          <h1><i class="fas fa-percent"></i> Offers & Deals</h1>
+          <p class="page-subtitle">Exclusive offers and discounts just for you</p>
+        </div>
+        
+        <div class="header-actions-mobile">
+          <button class="btn btn-primary">
+            <i class="fas fa-star"></i>
+            My Favorites
+          </button>
+        </div>
+      </div>
+
+      <!-- Offer Categories -->
+      <div class="offers-categories">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">
+            <i class="fas fa-fire"></i>
+            All Offers
+          </button>
+          <button class="category-tab" data-category="flights">
+            <i class="fas fa-plane-departure"></i>
+            Flight Deals
+          </button>
+          <button class="category-tab" data-category="hotels">
+            <i class="fas fa-bed"></i>
+            Hotel Deals
+          </button>
+          <button class="category-tab" data-category="packages">
+            <i class="fas fa-suitcase"></i>
+            Package Deals
+          </button>
+          <button class="category-tab" data-category="limited">
+            <i class="fas fa-clock"></i>
+            Limited Time
+          </button>
+        </div>
+      </div>
+
+      <!-- Featured Offers Banner -->
+      <div class="featured-banner">
+        <div class="banner-content">
+          <div class="banner-text">
+            <span class="banner-tag">Limited Time</span>
+            <h2>Save up to 50% on International Flights!</h2>
+            <p>Book now and travel before December 31st, 2024</p>
+            <button class="btn btn-accent">
+              <i class="fas fa-tag"></i>
+              Claim Offer
+            </button>
+          </div>
+          <div class="banner-timer">
+            <div class="timer-item">
+              <span class="timer-value">23</span>
+              <span class="timer-label">Hours</span>
+            </div>
+            <div class="timer-item">
+              <span class="timer-value">45</span>
+              <span class="timer-label">Minutes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offers List -->
+      <div class="offers-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-tags"></i>
+            Available Offers
+          </h2>
+          <div class="filter-options">
+            <select class="filter-select">
+              <option value="newest">Newest First</option>
+              <option value="discount">Highest Discount</option>
+              <option value="expiry">Expiring Soon</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="offers-grid" id="offersList">
+          <!-- offers loaded by JS -->
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // Include dashboard.js functionality for sidebar and user management
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dashboard initialization
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+          }
+        });
+      }
+      
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = 'login.html';
+          }
+        });
+      }
+      
+      // Offers functionality
+      const offersList = document.getElementById('offersList');
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      const filterSelect = document.querySelector('.filter-select');
+      
+      // Listen for profile updates
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'travelEaseUser') {
+          updateUserDisplays();
+        }
+      });
+      
+      window.addEventListener('profileUpdated', function(e) {
+        updateUserDisplays();
+      });
+      
+      // Initialize user displays
+      updateUserDisplays();
+      
+      // Enhanced offers data with categories and more details
+      const offers = [
+        {
+          id: 1,
+          title: 'International Flight Flash Sale',
+          description: 'Book your dream international flight at unbeatable prices. Limited time offer with instant confirmation.',
+          discount: '50% OFF',
+          category: 'flights',
+          code: 'INTFLIGHT50',
+          features: ['All Destinations', 'Instant Booking', 'Free Cancellation', '24/7 Support'],
+          validity: 'Valid until Dec 31, 2024',
+          priority: 1
+        },
+        {
+          id: 2,
+          title: 'Luxury Hotel Stays',
+          description: 'Experience premium accommodations with exclusive amenities and personalized service.',
+          discount: '35% OFF',
+          category: 'hotels',
+          code: 'LUXHOTEL35',
+          features: ['5-Star Hotels', 'Spa Access', 'Room Upgrade', 'Free Breakfast'],
+          validity: 'Valid until Nov 30, 2024',
+          priority: 2
+        },
+        {
+          id: 3,
+          title: 'Complete Vacation Packages',
+          description: 'All-inclusive vacation packages with flights, hotels, and activities bundled together.',
+          discount: '40% OFF',
+          category: 'packages',
+          code: 'VACATION40',
+          features: ['Flight + Hotel', 'Activities Included', 'Tour Guide', 'Travel Insurance'],
+          validity: 'Valid until Jan 15, 2025',
+          priority: 3
+        },
+        {
+          id: 4,
+          title: 'Weekend Getaway Special',
+          description: 'Quick weekend escapes to nearby destinations with amazing deals on short stays.',
+          discount: '25% OFF',
+          category: 'hotels',
+          code: 'WEEKEND25',
+          features: ['2-3 Days', 'City Centers', 'Free WiFi', 'Late Checkout'],
+          validity: 'Valid until Dec 15, 2024',
+          priority: 4
+        },
+        {
+          id: 5,
+          title: 'Last Minute Flight Deals',
+          description: 'Grab amazing discounts on flights departing within the next 7 days. Perfect for spontaneous travelers.',
+          discount: '60% OFF',
+          category: 'limited',
+          code: 'LASTMIN60',
+          features: ['7 Days Notice', 'Domestic & Intl', 'Mobile Check-in', 'Seat Selection'],
+          validity: 'Valid for next 48 hours only',
+          priority: 5
+        },
+        {
+          id: 6,
+          title: 'Adventure Package Combo',
+          description: 'Thrilling adventure packages including extreme sports, mountain trekking, and wildlife safaris.',
+          discount: '45% OFF',
+          category: 'packages',
+          code: 'ADVENTURE45',
+          features: ['Adventure Sports', 'Professional Guide', 'Safety Equipment', 'Group Discounts'],
+          validity: 'Valid until Mar 31, 2025',
+          priority: 6
+        }
+      ];
+      
+      let currentCategory = 'all';
+      
+      // Initialize timer
+      startCountdownTimer();
+      
+      // Initialize display
+      displayOffers(offers);
+      
+      // Category filter functionality
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Update active tab
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Filter offers
+          currentCategory = tab.dataset.category;
+          const filteredOffers = currentCategory === 'all' 
+            ? offers 
+            : offers.filter(offer => offer.category === currentCategory);
+          
+          displayOffers(filteredOffers);
+        });
+      });
+      
+      // Sort/filter functionality
+      if (filterSelect) {
+        filterSelect.addEventListener('change', () => {
+          const currentOffers = getCurrentOffers();
+          const sortedOffers = sortOffers(currentOffers, filterSelect.value);
+          displayOffers(sortedOffers);
+        });
+      }
+      
+      function getCurrentOffers() {
+        return currentCategory === 'all' 
+          ? offers 
+          : offers.filter(offer => offer.category === currentCategory);
+      }
+      
+      function sortOffers(offersToSort, sortType) {
+        const sorted = [...offersToSort];
+        
+        switch (sortType) {
+          case 'discount':
+            return sorted.sort((a, b) => {
+              const aDiscount = parseInt(a.discount.replace(/[^0-9]/g, ''));
+              const bDiscount = parseInt(b.discount.replace(/[^0-9]/g, ''));
+              return bDiscount - aDiscount;
+            });
+          case 'expiry':
+            return sorted.sort((a, b) => a.priority - b.priority);
+          case 'newest':
+          default:
+            return sorted.sort((a, b) => a.id - b.id);
+        }
+      }
+      
+      function displayOffers(offersToShow) {
+        if (!offersList) return;
+        
+        let html = '';
+        offersToShow.forEach(offer => {
+          const categoryIcons = {
+            flights: 'fa-plane-departure',
+            hotels: 'fa-bed',
+            packages: 'fa-suitcase',
+            limited: 'fa-clock'
+          };
+          
+          const icon = categoryIcons[offer.category] || 'fa-tag';
+          
+          html += `
+            <div class="offer-card" data-category="${offer.category}">
+              <div class="offer-header">
+                <div class="offer-discount">${offer.discount}</div>
+                <h3 class="offer-title">${offer.title}</h3>
+                <div class="offer-category">
+                  <i class="fas ${icon}"></i>
+                  ${offer.category.charAt(0).toUpperCase() + offer.category.slice(1)}
+                </div>
+              </div>
+              
+              <div class="offer-content">
+                <p class="offer-description">${offer.description}</p>
+                
+                <div class="offer-features">
+                  ${offer.features.map(feature => `<span class="offer-feature">${feature}</span>`).join('')}
+                </div>
+                
+                <div class="offer-validity">
+                  <i class="fas fa-calendar-alt"></i>
+                  ${offer.validity}
+                </div>
+                
+                <div class="offer-footer">
+                  <div class="offer-code">${offer.code}</div>
+                  <button class="claim-offer-btn" data-id="${offer.id}">
+                    <i class="fas fa-tag"></i>
+                    Claim Offer
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        offersList.innerHTML = html;
+        
+        // Add claim event listeners
+        document.querySelectorAll('.claim-offer-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const offerId = btn.getAttribute('data-id');
+            const offer = offers.find(o => o.id == offerId);
+            claimOffer(offer);
+          });
+        });
+      }
+      
+      function claimOffer(offer) {
+        // Copy code to clipboard
+        navigator.clipboard.writeText(offer.code).then(() => {
+          // Save claimed offer
+          const claimedOffers = JSON.parse(localStorage.getItem('claimedOffers')) || [];
+          
+          if (!claimedOffers.find(o => o.id === offer.id)) {
+            claimedOffers.push({
+              ...offer,
+              claimedDate: new Date().toISOString()
+            });
+            localStorage.setItem('claimedOffers', JSON.stringify(claimedOffers));
+          }
+          
+          // Show success message
+          alert(`Offer claimed successfully!\n\nCode: ${offer.code}\n(Copied to clipboard)\n\nUse this code during checkout to get ${offer.discount} on ${offer.title}.\n\n${offer.validity}`);
+        }).catch(() => {
+          // Fallback if clipboard API is not available
+          alert(`Offer claimed successfully!\n\nCode: ${offer.code}\n\nPlease copy this code and use it during checkout to get ${offer.discount} on ${offer.title}.\n\n${offer.validity}`);
+        });
+      }
+      
+      function startCountdownTimer() {
+        const timerValues = document.querySelectorAll('.timer-value');
+        
+        if (timerValues.length === 0) return;
+        
+        let hours = 23;
+        let minutes = 45;
+        
+        const updateTimer = () => {
+          if (timerValues[0]) timerValues[0].textContent = hours.toString().padStart(2, '0');
+          if (timerValues[1]) timerValues[1].textContent = minutes.toString().padStart(2, '0');
+          
+          minutes--;
+          if (minutes < 0) {
+            minutes = 59;
+            hours--;
+            if (hours < 0) {
+              hours = 23;
+              minutes = 59;
+            }
+          }
+        };
+        
+        // Update immediately
+        updateTimer();
+        
+        // Update every minute
+        setInterval(updateTimer, 60000);
+      }
+      
+      // Update user displays across the page
+      function updateUserDisplays() {
+        const userData = JSON.parse(localStorage.getItem('travelEaseUser')) || {
+          username: 'User',
+          avatar: '../assets/images/img1.png'
+        };
+        
+        // Update header user info
+        const headerUsername = document.getElementById('username');
+        const headerAvatar = document.getElementById('userAvatar');
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        
+        if (headerUsername) headerUsername.textContent = userData.username;
+        if (headerAvatar) headerAvatar.src = userData.avatar;
+        if (sidebarUsername) sidebarUsername.textContent = userData.username;
+        if (sidebarAvatar) sidebarAvatar.src = userData.avatar;
+      }
+    });
+  </script>
+</body>
+</html>

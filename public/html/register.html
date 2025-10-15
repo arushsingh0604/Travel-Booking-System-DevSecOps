@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - TravelEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dark: #d97706;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: var(--font-size-base); line-height: 1.6; color: var(--text-primary); background: var(--bg-secondary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+input, textarea, select { font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: var(--font-size-sm); font-weight: 500; border-radius: var(--radius-lg); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--text-white); box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn-lg { padding: 1rem 2rem; font-size: var(--font-size-lg); border-radius: var(--radius-xl); }
+
+.page-fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.auth-wrapper { min-height: 100vh; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); position: relative; overflow: hidden; }
+.auth-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('../assets/images/hero.avif') center/cover no-repeat; opacity: 0.1; z-index: 1; }
+.auth-wrapper::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(29, 78, 216, 0.95) 100%); z-index: 2; }
+
+.back-home { position: fixed; top: 2rem; left: 2rem; z-index: 1001; display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.9); color: var(--text-primary); border-radius: var(--radius-lg); font-weight: 500; transition: all 0.2s ease; backdrop-filter: blur(10px); }
+.back-home:hover { background: var(--bg-primary); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+.auth-container { position: relative; z-index: 3; min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; max-width: 1200px; margin: 0 auto; }
+.auth-visual { display: flex; align-items: center; justify-content: center; padding: 2rem; color: var(--text-white); }
+.visual-content { max-width: 400px; }
+.brand-section { text-align: center; margin-bottom: 3rem; }
+.auth-logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1.5rem; box-shadow: var(--shadow-lg); }
+.brand-title { font-size: var(--font-size-3xl); font-weight: 700; margin-bottom: 1rem; color: var(--text-white); }
+.brand-subtitle { font-size: var(--font-size-lg); line-height: 1.6; opacity: 0.9; }
+
+.features-list, .benefits-list { display: flex; flex-direction: column; gap: 1rem; }
+.feature-item, .benefit-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s ease; }
+.feature-item:hover, .benefit-item:hover { background: rgba(255, 255, 255, 0.15); transform: translateX(5px); }
+.feature-item i, .benefit-item i { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--accent); color: var(--text-white); border-radius: 50%; font-size: 0.875rem; }
+.feature-item span, .benefit-item span { font-weight: 500; }
+
+.auth-form { background: var(--bg-primary); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.form-container { width: 100%; max-width: 400px; }
+.form-header { text-align: center; margin-bottom: 2rem; }
+.form-title { font-size: var(--font-size-3xl); font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+.form-subtitle { color: var(--text-muted); font-size: var(--font-size-base); }
+
+.auth-form-element { display: flex; flex-direction: column; gap: 1.5rem; }
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: flex; align-items: center; gap: 0.5rem; font-size: var(--font-size-sm); font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem; }
+.form-label i { width: 16px; color: var(--text-muted); }
+.form-input { width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); font-size: var(--font-size-base); background: var(--bg-primary); color: var(--text-primary); transition: all 0.2s ease; }
+.form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1); }
+.form-input::placeholder { color: var(--text-muted); }
+
+.password-field { position: relative; }
+.toggle-password { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.25rem; border-radius: var(--radius-sm); transition: all 0.2s ease; }
+.toggle-password:hover { color: var(--primary); background: var(--gray-100); }
+
+.password-strength { margin-top: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
+.strength-bar { flex: 1; height: 4px; background: var(--gray-200); border-radius: var(--radius-sm); overflow: hidden; }
+.strength-fill { height: 100%; width: 0%; background: var(--danger); transition: all 0.3s ease; border-radius: var(--radius-sm); }
+.strength-fill.weak { width: 25%; background: var(--danger); }
+.strength-fill.fair { width: 50%; background: var(--warning); }
+.strength-fill.good { width: 75%; background: var(--info); }
+.strength-fill.strong { width: 100%; background: var(--success); }
+.strength-text { font-size: var(--font-size-xs); color: var(--text-muted); white-space: nowrap; }
+
+.terms-agreement { display: flex; align-items: center; gap: 0.5rem; font-size: var(--font-size-sm); color: var(--text-secondary); cursor: pointer; }
+.terms-agreement input { display: none; }
+.checkmark { width: 18px; height: 18px; border: 2px solid var(--border-medium); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; }
+.terms-agreement input:checked + .checkmark { background: var(--primary); border-color: var(--primary); }
+.terms-agreement input:checked + .checkmark::after { content: '✓'; color: var(--text-white); font-size: var(--font-size-xs); font-weight: bold; }
+
+.auth-submit { width: 100%; margin: 0.5rem 0; }
+
+.divider { position: relative; text-align: center; margin: 1.5rem 0; }
+.divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-light); }
+.divider span { background: var(--bg-primary); padding: 0 1rem; color: var(--text-muted); font-size: var(--font-size-sm); position: relative; z-index: 1; }
+
+.social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.btn-social { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: var(--bg-primary); color: var(--text-secondary); font-weight: 500; transition: all 0.2s ease; cursor: pointer; }
+.btn-social:hover { border-color: var(--border-medium); background: var(--gray-50); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn-google:hover { border-color: #db4437; color: #db4437; }
+.btn-facebook:hover { border-color: #1877f2; color: #1877f2; }
+
+.auth-switch { text-align: center; color: var(--text-muted); font-size: var(--font-size-sm); margin: 0; }
+.switch-link, .link { color: var(--primary); font-weight: 500; text-decoration: none; transition: color 0.2s ease; }
+.switch-link:hover, .link:hover { color: var(--primary-dark); text-decoration: underline; }
+
+@media (max-width: 968px) {
+  .auth-container { grid-template-columns: 1fr; }
+  .auth-visual { padding: 2rem 1rem 1rem; }
+  .visual-content { max-width: 100%; }
+  .brand-section { margin-bottom: 2rem; }
+  .features-list, .benefits-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
+
+@media (max-width: 768px) {
+  .back-home { top: 1rem; left: 1rem; }
+  .auth-form { padding: 1rem; }
+  .form-container { max-width: 100%; }
+  .features-list, .benefits-list { grid-template-columns: 1fr; }
+  .social-login { grid-template-columns: 1fr; }
+}
+
+.auth-submit:disabled { position: relative; overflow: hidden; }
+.auth-submit:disabled::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); animation: loading-shimmer 1.5s infinite; }
+@keyframes loading-shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <!-- Back to Home -->
+    <a href="/" class="back-home">
+      <i class="fas fa-arrow-left"></i>
+      Back to Home
+    </a>
+    
+    <div class="auth-container page-fade-in">
+      <div class="auth-visual">
+        <div class="visual-content">
+          <div class="brand-section">
+            <img src="../assets/images/img2.webp" alt="TravelEase" class="auth-logo">
+            <h2 class="brand-title">Join TravelEase!</h2>
+            <p class="brand-subtitle">Create your account and start exploring the world. Your adventure awaits with exclusive deals and personalized travel experiences.</p>
+          </div>
+          <div class="benefits-list">
+            <div class="benefit-item">
+              <i class="fas fa-percent"></i>
+              <span>Exclusive discounts & offers</span>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-bookmark"></i>
+              <span>Save favorite destinations</span>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-history"></i>
+              <span>Track booking history</span>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-bell"></i>
+              <span>Get travel alerts & updates</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="auth-form">
+        <div class="form-container">
+          <div class="form-header">
+            <h1 class="form-title">Create Account</h1>
+            <p class="form-subtitle">Fill in your details to get started</p>
+          </div>
+          
+          <form id="registerForm" class="auth-form-element">
+            <div class="form-group">
+              <label for="regName" class="form-label">
+                <i class="fas fa-user"></i>
+                Full Name
+              </label>
+              <input 
+                id="regName" 
+                type="text" 
+                class="form-input" 
+                placeholder="Enter your full name"
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="regEmail" class="form-label">
+                <i class="fas fa-envelope"></i>
+                Email Address
+              </label>
+              <input 
+                id="regEmail" 
+                type="email" 
+                class="form-input" 
+                placeholder="Enter your email"
+                required
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="regPass" class="form-label">
+                <i class="fas fa-lock"></i>
+                Password
+              </label>
+              <div class="password-field">
+                <input 
+                  id="regPass" 
+                  type="password" 
+                  class="form-input" 
+                  placeholder="Create a strong password"
+                  required
+                  minlength="6"
+                >
+                <button type="button" class="toggle-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div class="strength-fill"></div>
+                </div>
+                <span class="strength-text">Password strength</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="terms-agreement">
+                <input type="checkbox" id="agreeTerms" required>
+                <span class="checkmark"></span>
+                I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg auth-submit">
+              <i class="fas fa-user-plus"></i>
+              Create Account
+            </button>
+            
+            <div class="divider">
+              <span>or sign up with</span>
+            </div>
+            
+            <div class="social-login">
+              <button type="button" class="btn-social btn-google">
+                <i class="fab fa-google"></i>
+                Google
+              </button>
+              <button type="button" class="btn-social btn-facebook">
+                <i class="fab fa-facebook-f"></i>
+                Facebook
+              </button>
+            </div>
+            
+            <p class="auth-switch">
+              Already have an account? 
+              <a href="login.html" class="switch-link">Sign in now</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const reg = document.getElementById('registerForm');
+      const log = document.getElementById('loginForm');
+
+      // Password toggle functionality
+      const toggleButtons = document.querySelectorAll('.toggle-password');
+      toggleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const input = btn.parentNode.querySelector('input');
+          const icon = btn.querySelector('i');
+          
+          if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+          } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+          }
+        });
+      });
+
+      // Password strength checker
+      const passwordInput = document.getElementById('regPass');
+      if (passwordInput) {
+        const strengthFill = document.querySelector('.strength-fill');
+        const strengthText = document.querySelector('.strength-text');
+        
+        passwordInput.addEventListener('input', (e) => {
+          const password = e.target.value;
+          const strength = calculatePasswordStrength(password);
+          
+          strengthFill.className = `strength-fill ${strength.class}`;
+          strengthText.textContent = strength.text;
+        });
+      }
+
+      function calculatePasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+
+        if (score <= 2) return { class: 'weak', text: 'Weak password' };
+        if (score === 3) return { class: 'fair', text: 'Fair password' };
+        if (score === 4) return { class: 'good', text: 'Good password' };
+        return { class: 'strong', text: 'Strong password' };
+      }
+
+      // Social login buttons (for demo)
+      const socialBtns = document.querySelectorAll('.btn-social');
+      socialBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const provider = btn.classList.contains('btn-google') ? 'Google' : 'Facebook';
+          alert(`${provider} registration is not implemented in this demo. Please use the form above.`);
+        });
+      });
+
+      // Form submission with enhanced UX
+      if (reg) {
+        reg.addEventListener('submit', async e => {
+          e.preventDefault();
+          
+          const submitBtn = reg.querySelector('.auth-submit');
+          const originalText = submitBtn.innerHTML;
+          
+          // Show loading state
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+          
+          try {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!agreeTerms) {
+              throw new Error('Please agree to the Terms of Service and Privacy Policy');
+            }
+            
+            const user = { name, email, password: pass, balance: 0, avatar: null };
+            let registrationSuccessful = false;
+            
+            // Store user data for both backend and local storage
+            const newUser = {
+              username: name,
+              email: email,
+              password: pass,
+              avatar: '../assets/images/img1.png',
+              balance: 0
+            };
+
+            try {
+              // Try backend registration first
+              const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+              });
+              
+              const data = await res.json();
+              
+              if (res.ok) {
+                registrationSuccessful = true;
+              } else {
+                throw new Error(data.message || 'Backend registration failed');
+              }
+            } catch (backendError) {
+              console.log('Backend not available, using local storage...');
+              
+              // Check if user already exists locally
+              const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+              const existingUser = users.find(u => u.email === email);
+              
+              if (existingUser) {
+                throw new Error('User already exists with this email!');
+              }
+              
+              // Register locally
+              registrationSuccessful = true;
+            }
+            
+            if (registrationSuccessful) {
+              // Success animation
+              submitBtn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
+              submitBtn.style.background = 'var(--success)';
+              
+              // Store user data locally
+              const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+              users.push(newUser);
+              localStorage.setItem('registeredUsers', JSON.stringify(users));
+              
+              setTimeout(() => {
+                showNotification('Registration successful! Redirecting to login...', 'success');
+                location.href = 'login.html';
+              }, 1500);
+            } else {
+              throw new Error('Registration failed!');
+            }
+          } catch (error) {
+            // Error state
+            submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Try Again';
+            submitBtn.style.background = 'var(--danger)';
+            showNotification(error.message, 'error');
+            
+            setTimeout(() => {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalText;
+              submitBtn.style.background = '';
+            }, 2000);
+          }
+        });
+      }
+
+      // Enhanced notification system
+      function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <div class="notification-content">
+            <i class="fas fa-${getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+          </div>
+          <button class="notification-close">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Trigger animation
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Auto remove
+        setTimeout(() => removeNotification(notification), 5000);
+        
+        // Close button
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+          removeNotification(notification);
+        });
+      }
+      
+      function getNotificationIcon(type) {
+        switch(type) {
+          case 'success': return 'check-circle';
+          case 'error': return 'exclamation-circle';
+          case 'warning': return 'exclamation-triangle';
+          default: return 'info-circle';
+        }
+      }
+      
+      function removeNotification(notification) {
+        notification.classList.add('hide');
+        setTimeout(() => notification.remove(), 300);
+      }
+    });
+
+    // Add notification styles
+    const notificationStyles = document.createElement('style');
+    notificationStyles.textContent = `
+      .notification { position: fixed; top: 2rem; right: 2rem; background: var(--bg-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; min-width: 300px; max-width: 500px; z-index: 10000; transform: translateX(400px); opacity: 0; transition: all 0.3s ease; }
+      .notification.show { transform: translateX(0); opacity: 1; }
+      .notification.hide { transform: translateX(400px); opacity: 0; }
+      .notification-content { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+      .notification-success { border-left: 4px solid var(--success); }
+      .notification-success .notification-content i { color: var(--success); }
+      .notification-error { border-left: 4px solid var(--danger); }
+      .notification-error .notification-content i { color: var(--danger); }
+      .notification-close { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.25rem; border-radius: var(--radius-sm); transition: all 0.2s ease; }
+      .notification-close:hover { background: var(--gray-100); color: var(--text-primary); }
+    `;
+    document.head.appendChild(notificationStyles);
+  </script>
+</body>
+</html>

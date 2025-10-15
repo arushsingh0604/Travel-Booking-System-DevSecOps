@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration - TravelEas</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .register-header::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-header i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .register-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .register-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .register-form {
+            padding: 60px 40px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:valid {
+            border-color: #28a745;
+        }
+
+        .form-group input::placeholder {
+            color: #adb5bd;
+        }
+
+        .register-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e6ed;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-requirements.show {
+            display: block;
+        }
+
+        .password-requirements ul {
+            margin: 5px 0 0 15px;
+        }
+
+        .password-requirements li {
+            margin: 2px 0;
+        }
+
+        .password-requirements li.valid {
+            color: #28a745;
+        }
+
+        .password-requirements li.invalid {
+            color: #dc3545;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .register-form {
+                padding: 40px 25px 30px;
+            }
+
+            .register-header {
+                padding: 30px 20px;
+            }
+
+            .register-header h1 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-link" title="Back to Home">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="register-container">
+        <div class="register-header">
+            <i class="fas fa-user-shield"></i>
+            <h1>Admin Registration</h1>
+            <p>Create your administrator account</p>
+        </div>
+
+        <form class="register-form" id="adminRegisterForm">
+            <div id="alertContainer"></div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name" minlength="2" maxlength="50">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a strong password" minlength="6">
+                <div class="password-requirements" id="passwordRequirements">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li id="length" class="invalid">At least 6 characters</li>
+                        <li id="letter" class="invalid">At least one letter</li>
+                        <li id="number" class="invalid">At least one number</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+            </div>
+
+            <button type="submit" class="register-btn" id="registerBtn">
+                <span class="btn-text">Create Admin Account</span>
+                <span class="btn-loading">
+                    <div class="spinner"></div>
+                    Registering...
+                </span>
+            </button>
+
+            <div class="login-link">
+                <p>Already have an admin account? <a href="admin-login.html">Sign In</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Admin Registration page loaded');
+        
+            // Get form elements
+            const form = document.getElementById('adminRegisterForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const registerBtn = document.getElementById('registerBtn');
+            const btnText = registerBtn.querySelector('.btn-text');
+            const btnLoading = registerBtn.querySelector('.btn-loading');
+            const alertContainer = document.getElementById('alertContainer');
+            const passwordRequirements = document.getElementById('passwordRequirements');
+        
+            // Password validation elements
+            const lengthRequirement = document.getElementById('length');
+            const letterRequirement = document.getElementById('letter');
+            const numberRequirement = document.getElementById('number');
+        
+            // Show/hide password requirements
+            passwordInput.addEventListener('focus', function() {
+                passwordRequirements.classList.add('show');
+            });
+        
+            passwordInput.addEventListener('blur', function() {
+                if (passwordInput.value === '') {
+                    passwordRequirements.classList.remove('show');
+                }
+            });
+        
+            // Real-time password validation
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                
+                // Check length
+                if (password.length >= 6) {
+                    lengthRequirement.classList.remove('invalid');
+                    lengthRequirement.classList.add('valid');
+                } else {
+                    lengthRequirement.classList.remove('valid');
+                    lengthRequirement.classList.add('invalid');
+                }
+        
+                // Check for letter
+                if (/[a-zA-Z]/.test(password)) {
+                    letterRequirement.classList.remove('invalid');
+                    letterRequirement.classList.add('valid');
+                } else {
+                    letterRequirement.classList.remove('valid');
+                    letterRequirement.classList.add('invalid');
+                }
+        
+                // Check for number
+                if (/[0-9]/.test(password)) {
+                    numberRequirement.classList.remove('invalid');
+                    numberRequirement.classList.add('valid');
+                } else {
+                    numberRequirement.classList.remove('valid');
+                    numberRequirement.classList.add('invalid');
+                }
+        
+                // Validate confirm password if it has value
+                if (confirmPasswordInput.value) {
+                    validatePasswordMatch();
+                }
+            });
+        
+            // Confirm password validation
+            confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+        
+            function validatePasswordMatch() {
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    confirmPasswordInput.setCustomValidity('Passwords do not match');
+                } else {
+                    confirmPasswordInput.setCustomValidity('');
+                }
+            }
+        
+            // Email validation
+            emailInput.addEventListener('input', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email && !emailRegex.test(email)) {
+                    this.setCustomValidity('Please enter a valid email address');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        
+            // Name validation
+            nameInput.addEventListener('input', function() {
+                const name = this.value.trim();
+                
+                if (name.length < 2) {
+                    this.setCustomValidity('Name must be at least 2 characters long');
+                } else if (name.length > 50) {
+                    this.setCustomValidity('Name cannot exceed 50 characters');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('📝 Admin registration form submitted');
+        
+                // Get form data
+                const formData = {
+                    name: nameInput.value.trim(),
+                    email: emailInput.value.trim().toLowerCase(),
+                    password: passwordInput.value,
+                    confirmPassword: confirmPasswordInput.value
+                };
+        
+                console.log('📄 Form data prepared:', {
+                    name: formData.name,
+                    email: formData.email,
+                    passwordLength: formData.password.length
+                });
+        
+                // Client-side validation
+                if (!validateForm(formData)) {
+                    return;
+                }
+        
+                // Show loading state
+                setLoadingState(true);
+        
+                try {
+                    console.log('🌐 Sending registration request...');
+                    
+                    const response = await fetch('/api/admin/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: formData.name,
+                            email: formData.email,
+                            password: formData.password
+                        })
+                    });
+        
+                    console.log('📡 Server response status:', response.status);
+        
+                    const data = await response.json();
+                    console.log('📦 Server response data:', data);
+        
+                    if (response.ok && data.success) {
+                        console.log('✅ Admin registration successful');
+                        showAlert('success', 'Admin account created successfully! Redirecting to login...');
+                        
+                        // Clear form
+                        form.reset();
+                        passwordRequirements.classList.remove('show');
+                        
+                        // Store success message for login page
+                        sessionStorage.setItem('adminRegisterSuccess', 'Account created successfully! Please sign in.');
+                        
+                        // Redirect to login page after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = 'admin-login.html';
+                        }, 2000);
+                        
+                    } else {
+                        console.log('❌ Admin registration failed:', data.message);
+                        showAlert('error', data.message || 'Registration failed. Please try again.');
+                    }
+        
+                } catch (error) {
+                    console.error('💥 Registration error:', error);
+                    showAlert('error', 'Network error. Please check your connection and try again.');
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+        
+            function validateForm(data) {
+                console.log('🔍 Validating form data...');
+        
+                // Clear previous alerts
+                hideAlert();
+        
+                // Name validation
+                if (!data.name || data.name.length < 2) {
+                    showAlert('error', 'Name must be at least 2 characters long.');
+                    nameInput.focus();
+                    return false;
+                }
+        
+                if (data.name.length > 50) {
+                    showAlert('error', 'Name cannot exceed 50 characters.');
+                    nameInput.focus();
+                    return false;
+                }
+        
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!data.email || !emailRegex.test(data.email)) {
+                    showAlert('error', 'Please enter a valid email address.');
+                    emailInput.focus();
+                    return false;
+                }
+        
+                // Password validation
+                if (!data.password || data.password.length < 6) {
+                    showAlert('error', 'Password must be at least 6 characters long.');
+                    passwordInput.focus();
+                    return false;
+                }
+        
+                if (!/[a-zA-Z]/.test(data.password)) {
+                    showAlert('error', 'Password must contain at least one letter.');
+                    passwordInput.focus();
+                    return false;
+                }
+        
+                if (!/[0-9]/.test(data.password)) {
+                    showAlert('error', 'Password must contain at least one number.');
+                    passwordInput.focus();
+                    return false;
+                }
+        
+                // Confirm password validation
+                if (data.password !== data.confirmPassword) {
+                    showAlert('error', 'Passwords do not match.');
+                    confirmPasswordInput.focus();
+                    return false;
+                }
+        
+                console.log('✅ Form validation passed');
+                return true;
+            }
+        
+            function setLoadingState(isLoading) {
+                if (isLoading) {
+                    registerBtn.disabled = true;
+                    btnText.style.display = 'none';
+                    btnLoading.style.display = 'flex';
+                } else {
+                    registerBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                }
+            }
+        
+            function showAlert(type, message) {
+                console.log(`🔔 Showing ${type} alert:`, message);
+                
+                hideAlert(); // Clear any existing alerts
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                alert.id = 'currentAlert';
+                
+                alertContainer.appendChild(alert);
+                alert.style.display = 'block';
+                
+                // Auto-hide success/warning alerts after 5 seconds
+                if (type === 'success' || type === 'warning') {
+                    setTimeout(hideAlert, 5000);
+                }
+            }
+        
+            function hideAlert() {
+                const existingAlert = document.getElementById('currentAlert');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+            }
+        
+            // Handle browser back/forward buttons
+            window.addEventListener('pageshow', function() {
+                setLoadingState(false);
+                hideAlert();
+            });
+        
+            // Clear form validation messages on input
+            [nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+                input.addEventListener('input', function() {
+                    this.setCustomValidity('');
+                });
+            });
+        
+            console.log('✅ Admin Registration JavaScript initialized successfully');
+        });
+    </script>
+</body>
+</html>

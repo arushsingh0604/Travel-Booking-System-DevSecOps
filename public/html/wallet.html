@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet - TravelEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dark: #d97706;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --text-dark: var(--text-primary);
+  --border: var(--border-light);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: var(--font-size-base); line-height: 1.6; color: var(--text-primary); background: var(--bg-secondary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+input, textarea, select { font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: var(--font-size-sm); font-weight: 500; border-radius: var(--radius-lg); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--text-white); box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn-lg { padding: 1rem 2rem; font-size: var(--font-size-lg); border-radius: var(--radius-xl); }
+.btn-sm { padding: 0.5rem 1rem; font-size: var(--font-size-xs); }
+.btn-accent { background: var(--accent); color: var(--text-white); }
+.btn-accent:hover:not(:disabled) { background: var(--accent-dark); }
+
+.page-fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Dashboard styles */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 280px 1fr;
+}
+
+.dashboard-header {
+  grid-area: header;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 1.5rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-bar input {
+  width: 320px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--danger);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+  background: var(--gray-100);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.5rem 0;
+}
+
+.logout-btn {
+  color: var(--danger);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-light);
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  position: sticky;
+  top: 70px;
+}
+
+.sidebar-content {
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-xl);
+  margin-bottom: 2rem;
+}
+
+.user-avatar-large {
+  position: relative;
+}
+
+.user-avatar-large img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+.status-indicator.online {
+  background: var(--success);
+}
+
+.user-info h3 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.user-status {
+  font-size: var(--font-size-xs);
+  color: var(--accent);
+  font-weight: 500;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nav-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-item i {
+  width: 20px;
+  font-size: 1.125rem;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--gray-300);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.nav-item.active .nav-badge {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-badge.new {
+  background: var(--accent);
+}
+
+.main-content {
+  grid-area: main;
+  padding: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.content-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.header-actions-mobile {
+  display: none;
+}
+
+/* Balance Section */
+.balance-section {
+  margin-bottom: 40px;
+}
+
+.balance-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 20px;
+  padding: 32px;
+  color: white;
+  box-shadow: 0 8px 30px rgba(0, 102, 204, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.balance-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(60px, -60px);
+}
+
+.balance-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  transform: translate(-40px, 40px);
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-info {
+  flex: 1;
+}
+
+.balance-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.balance-amount {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.balance-status {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.balance-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+
+.balance-actions {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-actions .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Add Funds Section */
+.add-funds-section {
+  margin-bottom: 40px;
+}
+
+.form-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+  border-bottom: 1px solid var(--border);
+}
+
+.form-header h3 {
+  color: var(--text-dark);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-dark);
+}
+
+.add-funds-form {
+  padding: 32px;
+}
+
+.amount-section {
+  margin-bottom: 32px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amount-input {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  z-index: 2;
+}
+
+.amount-input input {
+  width: 100%;
+  padding: 16px 16px 16px 40px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  transition: border-color 0.3s ease;
+}
+
+.amount-input input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.quick-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-amount {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+}
+
+.quick-amount:hover,
+.quick-amount.selected {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.payment-method {
+  margin-bottom: 32px;
+}
+
+.payment-options {
+  display: grid;
+  gap: 12px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+  border-color: var(--primary);
+  background: rgba(0, 102, 204, 0.02);
+}
+
+.payment-option input[type="radio"] {
+  margin-right: 16px;
+  transform: scale(1.2);
+}
+
+.payment-option input[type="radio"]:checked + .option-content {
+  color: var(--primary);
+}
+
+.payment-option:has(input[type="radio"]:checked) {
+  border-color: var(--primary);
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.form-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Transactions Section */
+.transactions-section {
+  margin-top: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.section-title {
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-options {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-select {
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: white;
+}
+
+.transactions-list {
+  display: grid;
+  gap: 16px;
+}
+
+.transaction-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.transaction-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.transaction-icon.deposit {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.transaction-icon.payment {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+.transaction-icon.refund {
+  background: linear-gradient(135deg, var(--accent), #e67e00);
+}
+
+.transaction-details {
+  flex: 1;
+}
+
+.transaction-details h4 {
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.transaction-date {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.transaction-method {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.transaction-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.transaction-amount.positive {
+  color: #4CAF50;
+}
+
+.transaction-amount.negative {
+  color: #f44336;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-wrapper {
+    grid-template-columns: 240px 1fr;
+  }
+  
+  .search-bar input {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    grid-template-areas:
+      "header"
+      "main";
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  .search-bar {
+    display: none;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .header-actions-mobile {
+    display: block;
+  }
+  
+  .balance-actions {
+    flex-direction: column;
+  }
+  
+  .balance-amount {
+    font-size: 2.2rem;
+  }
+  
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .payment-options {
+    gap: 8px;
+  }
+  
+  .payment-option {
+    padding: 12px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .transaction-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .transaction-details {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .user-menu-trigger span {
+    display: none;
+  }
+}
+  </style>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-wrapper page-fade-in">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="brand">
+          <img src="../assets/images/img2.webp" alt="TravelEase" class="brand-logo">
+          <span class="brand-name">TravelEase</span>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search transactions...">
+        </div>
+        
+        <div class="header-actions">
+          <button class="icon-btn notifications-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          
+          <div class="user-menu">
+            <button class="user-menu-trigger">
+              <img id="userAvatar" src="../assets/images/Yash.jpg" alt="Avatar" class="user-avatar">
+              <span id="username">Yash Mittal</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown">
+              <a href="profile.html" class="dropdown-item">
+                <i class="fas fa-user"></i> Profile
+              </a>
+              <a href="wallet.html" class="dropdown-item">
+                <i class="fas fa-wallet"></i> Wallet
+              </a>
+              <div class="dropdown-divider"></div>
+              <button id="logoutBtn" class="dropdown-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-user">
+          <div class="user-avatar-large">
+            <img id="sidebarAvatar" src="../assets/images/Yash.jpg" alt="Avatar">
+            <div class="status-indicator online"></div>
+          </div>
+          <div class="user-info">
+            <h3 id="sidebarUsername">Yash Mittal</h3>
+            <p class="user-status">Premium Member</p>
+          </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="dashboard.html" class="nav-item">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Booking</span>
+            <a href="flights.html" class="nav-item">
+              <i class="fas fa-plane-departure"></i>
+              <span>Flights</span>
+              <span class="nav-badge">2</span>
+            </a>
+            <a href="hotels.html" class="nav-item">
+              <i class="fas fa-bed"></i>
+              <span>Hotels</span>
+            </a>
+            <a href="packages.html" class="nav-item">
+              <i class="fas fa-suitcase"></i>
+              <span>Packages</span>
+              <span class="nav-badge new">New</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Account</span>
+            <a href="offers.html" class="nav-item">
+              <i class="fas fa-percent"></i>
+              <span>Offers</span>
+            </a>
+            <a href="wallet.html" class="nav-item active">
+              <i class="fas fa-wallet"></i>
+              <span>Wallet</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+              <i class="fas fa-user-cog"></i>
+              <span>Settings</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-header">
+        <div class="page-title">
+          <h1><i class="fas fa-wallet"></i> My Wallet</h1>
+          <p class="page-subtitle">Manage your travel funds and view transaction history</p>
+        </div>
+        
+        <div class="header-actions-mobile">
+          <button class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Add Funds
+          </button>
+        </div>
+      </div>
+
+      <!-- Wallet Balance Card -->
+      <div class="balance-section">
+        <div class="balance-card">
+          <div class="balance-header">
+            <div class="balance-info">
+              <span class="balance-label">Available Balance</span>
+              <h2 class="balance-amount" id="balance">$0.00</h2>
+              <span class="balance-status">Last updated: Just now</span>
+            </div>
+            <div class="balance-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+          </div>
+          
+          <div class="balance-actions">
+            <button class="btn btn-primary" id="addFundsBtn">
+              <i class="fas fa-plus"></i>
+              Add Funds
+            </button>
+            <button class="btn btn-outline">
+              <i class="fas fa-arrow-down"></i>
+              Withdraw
+            </button>
+            <button class="btn btn-outline">
+              <i class="fas fa-exchange-alt"></i>
+              Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Funds Modal/Form -->
+      <div class="add-funds-section" style="display: none;">
+        <div class="form-card">
+          <div class="form-header">
+            <h3><i class="fas fa-plus-circle"></i> Add Funds to Wallet</h3>
+            <button class="close-btn" id="closeFundsForm">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          
+          <form id="addFundsForm" class="add-funds-form">
+            <div class="amount-section">
+              <label class="form-label">Amount to Add</label>
+              <div class="amount-input">
+                <span class="currency-symbol">$</span>
+                <input id="fundAmount" type="number" min="10" max="5000" placeholder="0.00" required>
+              </div>
+              <div class="quick-amounts">
+                <button type="button" class="quick-amount" data-amount="50">$50</button>
+                <button type="button" class="quick-amount" data-amount="100">$100</button>
+                <button type="button" class="quick-amount" data-amount="250">$250</button>
+                <button type="button" class="quick-amount" data-amount="500">$500</button>
+              </div>
+            </div>
+            
+            <div class="payment-method">
+              <label class="form-label">Payment Method</label>
+              <div class="payment-options">
+                <label class="payment-option">
+                  <input type="radio" name="paymentMethod" value="card" checked>
+                  <span class="option-content">
+                    <i class="fas fa-credit-card"></i>
+                    Credit/Debit Card
+                  </span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="paymentMethod" value="bank">
+                  <span class="option-content">
+                    <i class="fas fa-university"></i>
+                    Bank Transfer
+                  </span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="paymentMethod" value="paypal">
+                  <span class="option-content">
+                    <i class="fab fa-paypal"></i>
+                    PayPal
+                  </span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-footer">
+              <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-lock"></i>
+                Add Funds Securely
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="transactions-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-history"></i>
+            Recent Transactions
+          </h2>
+          <div class="filter-options">
+            <select class="filter-select">
+              <option value="all">All Transactions</option>
+              <option value="deposits">Deposits</option>
+              <option value="payments">Payments</option>
+              <option value="refunds">Refunds</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="transactions-list" id="transactionsList">
+          <!-- Sample transactions - in real app these would be loaded by JS -->
+          <div class="transaction-item">
+            <div class="transaction-icon deposit">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="transaction-details">
+              <h4>Funds Added</h4>
+              <p class="transaction-date">Today, 2:30 PM</p>
+              <span class="transaction-method">Credit Card</span>
+            </div>
+            <div class="transaction-amount positive">+$250.00</div>
+          </div>
+          
+          <div class="transaction-item">
+            <div class="transaction-icon payment">
+              <i class="fas fa-plane-departure"></i>
+            </div>
+            <div class="transaction-details">
+              <h4>Flight Booking Payment</h4>
+              <p class="transaction-date">Yesterday, 4:15 PM</p>
+              <span class="transaction-method">Wallet Balance</span>
+            </div>
+            <div class="transaction-amount negative">-$340.00</div>
+          </div>
+          
+          <div class="transaction-item">
+            <div class="transaction-icon payment">
+              <i class="fas fa-bed"></i>
+            </div>
+            <div class="transaction-details">
+              <h4>Hotel Booking Payment</h4>
+              <p class="transaction-date">2 days ago, 11:20 AM</p>
+              <span class="transaction-method">Wallet Balance</span>
+            </div>
+            <div class="transaction-amount negative">-$180.00</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dashboard initialization
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+          }
+        });
+      }
+      
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = 'login.html';
+          }
+        });
+      }
+      
+      // Wallet functionality
+      const balanceElem = document.getElementById('balance');
+      const addFundsForm = document.getElementById('addFundsForm');
+      const addFundsSection = document.querySelector('.add-funds-section');
+      const addFundsBtn = document.getElementById('addFundsBtn');
+      const closeFundsForm = document.getElementById('closeFundsForm');
+      const fundAmountInput = document.getElementById('fundAmount');
+      const quickAmountBtns = document.querySelectorAll('.quick-amount');
+      const filterSelect = document.querySelector('.filter-select');
+      
+      // Listen for profile updates
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'travelEaseUser') {
+          updateUserDisplays();
+        }
+      });
+      
+      window.addEventListener('profileUpdated', function(e) {
+        updateUserDisplays();
+      });
+      
+      // Initialize user displays
+      updateUserDisplays();
+      
+      let user = JSON.parse(localStorage.getItem('travelEaseUser')) || { balance: 250.00 };
+      let currentBalance = user.balance || 250.00;
+      
+      // Sample transactions data
+      let transactions = JSON.parse(localStorage.getItem('walletTransactions')) || [
+        {
+          id: 1,
+          type: 'deposit',
+          title: 'Funds Added',
+          date: 'Today, 2:30 PM',
+          method: 'Credit Card',
+          amount: 250.00,
+          timestamp: Date.now() - 3600000
+        },
+        {
+          id: 2,
+          type: 'payment',
+          title: 'Flight Booking Payment',
+          date: 'Yesterday, 4:15 PM',
+          method: 'Wallet Balance',
+          amount: -340.00,
+          timestamp: Date.now() - 86400000
+        },
+        {
+          id: 3,
+          type: 'payment',
+          title: 'Hotel Booking Payment',
+          date: '2 days ago, 11:20 AM',
+          method: 'Wallet Balance',
+          amount: -180.00,
+          timestamp: Date.now() - 172800000
+        }
+      ];
+      
+      // Initialize wallet display
+      updateBalanceDisplay();
+      displayTransactions(transactions);
+      
+      // Add funds button click
+      if (addFundsBtn) {
+        addFundsBtn.addEventListener('click', () => {
+          if (addFundsSection) {
+            addFundsSection.style.display = 'block';
+            if (fundAmountInput) fundAmountInput.focus();
+          }
+        });
+      }
+      
+      // Close add funds form
+      if (closeFundsForm) {
+        closeFundsForm.addEventListener('click', () => {
+          if (addFundsSection) {
+            addFundsSection.style.display = 'none';
+          }
+        });
+      }
+      
+      // Quick amount buttons
+      quickAmountBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const amount = btn.dataset.amount;
+          if (fundAmountInput) {
+            fundAmountInput.value = amount;
+            // Remove selected class from all buttons
+            quickAmountBtns.forEach(b => b.classList.remove('selected'));
+            // Add selected class to clicked button
+            btn.classList.add('selected');
+          }
+        });
+      });
+      
+      // Clear quick amount selection when typing
+      if (fundAmountInput) {
+        fundAmountInput.addEventListener('input', () => {
+          quickAmountBtns.forEach(btn => btn.classList.remove('selected'));
+        });
+      }
+      
+      // Add funds form submission
+      if (addFundsForm) {
+        addFundsForm.addEventListener('submit', e => {
+          e.preventDefault();
+          
+          const amount = parseFloat(fundAmountInput.value);
+          const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+          
+          if (amount <= 0 || isNaN(amount)) {
+            alert('Please enter a valid amount.');
+            return;
+          }
+          
+          if (amount < 10) {
+            alert('Minimum amount to add is $10.');
+            return;
+          }
+          
+          if (amount > 5000) {
+            alert('Maximum amount to add is $5000.');
+            return;
+          }
+          
+          // Add transaction
+          addTransaction({
+            type: 'deposit',
+            title: 'Funds Added',
+            date: new Date().toLocaleString(),
+            method: getPaymentMethodName(paymentMethod),
+            amount: amount
+          });
+          
+          // Update balance
+          currentBalance += amount;
+          user.balance = currentBalance;
+          localStorage.setItem('travelEaseUser', JSON.stringify(user));
+          
+          updateBalanceDisplay();
+          displayTransactions(transactions);
+          
+          // Show success message
+          alert(`$${amount.toFixed(2)} added to your wallet successfully!\n\nPayment Method: ${getPaymentMethodName(paymentMethod)}\n\nNew Balance: $${currentBalance.toFixed(2)}`);
+          
+          // Reset form and hide
+          addFundsForm.reset();
+          quickAmountBtns.forEach(btn => btn.classList.remove('selected'));
+          if (addFundsSection) {
+            addFundsSection.style.display = 'none';
+          }
+        });
+      }
+      
+      // Transaction filtering
+      if (filterSelect) {
+        filterSelect.addEventListener('change', () => {
+          const filterType = filterSelect.value;
+          let filteredTransactions = transactions;
+          
+          if (filterType !== 'all') {
+            filteredTransactions = transactions.filter(t => {
+              switch (filterType) {
+                case 'deposits':
+                  return t.type === 'deposit';
+                case 'payments':
+                  return t.type === 'payment';
+                case 'refunds':
+                  return t.type === 'refund';
+                default:
+                  return true;
+              }
+            });
+          }
+          
+          displayTransactions(filteredTransactions);
+        });
+      }
+      
+      function updateBalanceDisplay() {
+        if (balanceElem) {
+          balanceElem.textContent = `$${currentBalance.toFixed(2)}`;
+        }
+      }
+      
+      function getPaymentMethodName(method) {
+        const methods = {
+          card: 'Credit/Debit Card',
+          bank: 'Bank Transfer',
+          paypal: 'PayPal'
+        };
+        return methods[method] || 'Credit Card';
+      }
+      
+      function addTransaction(transactionData) {
+        const newTransaction = {
+          id: Date.now(),
+          timestamp: Date.now(),
+          ...transactionData
+        };
+        
+        transactions.unshift(newTransaction);
+        localStorage.setItem('walletTransactions', JSON.stringify(transactions));
+      }
+      
+      function displayTransactions(transactionsToShow) {
+        const transactionsList = document.getElementById('transactionsList');
+        if (!transactionsList) return;
+        
+        // Keep existing sample transactions and add new ones
+        let html = '';
+        
+        transactionsToShow.forEach(transaction => {
+          const iconClass = getTransactionIcon(transaction.type);
+          const amountClass = transaction.amount > 0 ? 'positive' : 'negative';
+          const amountPrefix = transaction.amount > 0 ? '+' : '';
+          
+          html += `
+            <div class="transaction-item">
+              <div class="transaction-icon ${transaction.type}">
+                <i class="fas ${iconClass}"></i>
+              </div>
+              <div class="transaction-details">
+                <h4>${transaction.title}</h4>
+                <p class="transaction-date">${transaction.date}</p>
+                <span class="transaction-method">${transaction.method}</span>
+              </div>
+              <div class="transaction-amount ${amountClass}">${amountPrefix}$${Math.abs(transaction.amount).toFixed(2)}</div>
+            </div>
+          `;
+        });
+        
+        transactionsList.innerHTML = html;
+      }
+      
+      function getTransactionIcon(type) {
+        const icons = {
+          deposit: 'fa-arrow-up',
+          payment: 'fa-plane-departure',
+          refund: 'fa-undo'
+        };
+        return icons[type] || 'fa-exchange-alt';
+      }
+      
+      // Handle mobile header add funds button
+      const mobileAddFundsBtn = document.querySelector('.header-actions-mobile .btn');
+      if (mobileAddFundsBtn) {
+        mobileAddFundsBtn.addEventListener('click', () => {
+          if (addFundsSection) {
+            addFundsSection.style.display = 'block';
+            if (fundAmountInput) fundAmountInput.focus();
+          }
+        });
+      }
+      
+      // Close modal when clicking outside
+      document.addEventListener('click', (e) => {
+        if (addFundsSection && addFundsSection.style.display === 'block') {
+          if (!addFundsSection.contains(e.target) && 
+              e.target !== addFundsBtn && 
+              e.target !== mobileAddFundsBtn &&
+              !e.target.closest('.btn')) {
+            addFundsSection.style.display = 'none';
+          }
+        }
+      });
+      
+      // Update user displays across the page
+      function updateUserDisplays() {
+        const userData = JSON.parse(localStorage.getItem('travelEaseUser')) || {
+          username: 'User',
+          avatar: '../assets/images/img1.png'
+        };
+        
+        // Update header user info
+        const headerUsername = document.getElementById('username');
+        const headerAvatar = document.getElementById('userAvatar');
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        
+        if (headerUsername) headerUsername.textContent = userData.username;
+        if (headerAvatar) headerAvatar.src = userData.avatar;
+        if (sidebarUsername) sidebarUsername.textContent = userData.username;
+        if (sidebarAvatar) sidebarAvatar.src = userData.avatar;
+      }
+    });
+  </script>
+</body>
+</html>
