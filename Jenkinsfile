@@ -40,8 +40,8 @@ pipeline {
                 withSonarQubeEnv(env.SONARQUBE_ENV) {
                     sh """
                         cd backend && sonar-scanner \
-                          -Dsonar.projectKey=Travel-Booking-System \
-                          -Dsonar.projectName='Travel Booking System' \
+                          -Dsonar.projectKey=Travel-Booking-System-DevSecOps \
+                          -Dsonar.projectName='Travel Booking System DevSecOps' \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=http://13.235.242.71:9000 \
                           -Dsonar.login=${SONAR_TOKEN}
