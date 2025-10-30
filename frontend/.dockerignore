@@ -1,0 +1,10 @@
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# The Nginx config file (it's copied separately in the Dockerfile)
+nginx.conf

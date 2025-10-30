@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packages - TravelEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dark: #d97706;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --text-dark: var(--text-primary);
+  --border: var(--border-light);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: var(--font-size-base); line-height: 1.6; color: var(--text-primary); background: var(--bg-secondary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+input, textarea, select { font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: var(--font-size-sm); font-weight: 500; border-radius: var(--radius-lg); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--text-white); box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn-lg { padding: 1rem 2rem; font-size: var(--font-size-lg); border-radius: var(--radius-xl); }
+.btn-sm { padding: 0.5rem 1rem; font-size: var(--font-size-xs); }
+.btn-accent { background: var(--accent); color: var(--text-white); }
+.btn-accent:hover:not(:disabled) { background: var(--accent-dark); }
+
+.page-fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Dashboard styles */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 280px 1fr;
+}
+
+.dashboard-header {
+  grid-area: header;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 1.5rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-bar input {
+  width: 320px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--danger);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+  background: var(--gray-100);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.5rem 0;
+}
+
+.logout-btn {
+  color: var(--danger);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-light);
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  position: sticky;
+  top: 70px;
+}
+
+.sidebar-content {
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-xl);
+  margin-bottom: 2rem;
+}
+
+.user-avatar-large {
+  position: relative;
+}
+
+.user-avatar-large img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+.status-indicator.online {
+  background: var(--success);
+}
+
+.user-info h3 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.user-status {
+  font-size: var(--font-size-xs);
+  color: var(--accent);
+  font-weight: 500;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nav-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-item i {
+  width: 20px;
+  font-size: 1.125rem;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--gray-300);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.nav-item.active .nav-badge {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-badge.new {
+  background: var(--accent);
+}
+
+.main-content {
+  grid-area: main;
+  padding: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.content-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.header-actions-mobile {
+  display: none;
+}
+
+/* Filter Section */
+.filter-section {
+  margin-bottom: 32px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.filter-tab {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 25px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.filter-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.filter-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+/* Packages Section */
+.packages-section {
+  margin-top: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.section-title {
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-options {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover,
+.view-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Packages Grid */
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.package-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.package-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.package-image {
+  height: 200px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.package-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%);
+  background-size: 30px 30px;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.package-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.package-content {
+  padding: 24px;
+}
+
+.package-header {
+  margin-bottom: 16px;
+}
+
+.package-title {
+  color: var(--text-dark);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.package-location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.package-details {
+  margin-bottom: 20px;
+}
+
+.package-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.package-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.package-feature {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.package-duration {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.package-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.package-price {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-amount {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.price-period {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.book-package-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.book-package-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+/* List View Styles */
+.packages-grid.list-view {
+  grid-template-columns: 1fr;
+}
+
+.packages-grid.list-view .package-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-height: 200px;
+}
+
+.packages-grid.list-view .package-image {
+  min-width: 200px;
+  height: 200px;
+  border-radius: 0;
+}
+
+.packages-grid.list-view .package-content {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+}
+
+.packages-grid.list-view .package-details {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.packages-grid.list-view .package-footer {
+  border: none;
+  padding: 0;
+  margin-left: 24px;
+}
+
+/* Category Specific Colors */
+.package-card[data-category="adventure"] .package-image {
+  background: linear-gradient(135deg, #2E7D32, #4CAF50);
+}
+
+.package-card[data-category="beach"] .package-image {
+  background: linear-gradient(135deg, #0288D1, #03A9F4);
+}
+
+.package-card[data-category="cultural"] .package-image {
+  background: linear-gradient(135deg, #7B1FA2, #9C27B0);
+}
+
+.package-card[data-category="luxury"] .package-image {
+  background: linear-gradient(135deg, #F57F17, #FFC107);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-wrapper {
+    grid-template-columns: 240px 1fr;
+  }
+  
+  .search-bar input {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    grid-template-areas:
+      "header"
+      "main";
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  .search-bar {
+    display: none;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .header-actions-mobile {
+    display: block;
+  }
+  
+  .packages-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-tab {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .packages-grid.list-view .package-card {
+    flex-direction: column;
+    max-height: none;
+  }
+  
+  .packages-grid.list-view .package-image {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .packages-grid.list-view .package-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .packages-grid.list-view .package-footer {
+    margin-left: 0;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .user-menu-trigger span {
+    display: none;
+  }
+}
+  </style>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-wrapper page-fade-in">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="brand">
+          <img src="../assets/images/img2.webp" alt="TravelEase" class="brand-logo">
+          <span class="brand-name">TravelEase</span>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search packages, destinations...">
+        </div>
+        
+        <div class="header-actions">
+          <button class="icon-btn notifications-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          
+          <div class="user-menu">
+            <button class="user-menu-trigger">
+              <img id="userAvatar" src="../assets/images/Yash.jpg" alt="Avatar" class="user-avatar">
+              <span id="username">Yash Mittal</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown">
+              <a href="profile.html" class="dropdown-item">
+                <i class="fas fa-user"></i> Profile
+              </a>
+              <a href="wallet.html" class="dropdown-item">
+                <i class="fas fa-wallet"></i> Wallet
+              </a>
+              <div class="dropdown-divider"></div>
+              <button id="logoutBtn" class="dropdown-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-user">
+          <div class="user-avatar-large">
+            <img id="sidebarAvatar" src="../assets/images/Yash.jpg" alt="Avatar">
+            <div class="status-indicator online"></div>
+          </div>
+          <div class="user-info">
+            <h3 id="sidebarUsername">Yash Mittal</h3>
+            <p class="user-status">Premium Member</p>
+          </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="dashboard.html" class="nav-item">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Booking</span>
+            <a href="flights.html" class="nav-item">
+              <i class="fas fa-plane-departure"></i>
+              <span>Flights</span>
+              <span class="nav-badge">2</span>
+            </a>
+            <a href="hotels.html" class="nav-item">
+              <i class="fas fa-bed"></i>
+              <span>Hotels</span>
+            </a>
+            <a href="packages.html" class="nav-item active">
+              <i class="fas fa-suitcase"></i>
+              <span>Packages</span>
+              <span class="nav-badge new">New</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Account</span>
+            <a href="offers.html" class="nav-item">
+              <i class="fas fa-percent"></i>
+              <span>Offers</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+              <i class="fas fa-wallet"></i>
+              <span>Wallet</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+              <i class="fas fa-user-cog"></i>
+              <span>Settings</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-header">
+        <div class="page-title">
+          <h1><i class="fas fa-suitcase"></i> Travel Packages</h1>
+          <p class="page-subtitle">Discover amazing vacation packages tailored for you</p>
+        </div>
+        
+        <div class="header-actions-mobile">
+          <button class="btn btn-primary">
+            <i class="fas fa-filter"></i>
+            Filter Packages
+          </button>
+        </div>
+      </div>
+
+      <!-- Package Filters -->
+      <div class="filter-section">
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-category="all">
+            <i class="fas fa-globe"></i>
+            All Packages
+          </button>
+          <button class="filter-tab" data-category="adventure">
+            <i class="fas fa-mountain"></i>
+            Adventure
+          </button>
+          <button class="filter-tab" data-category="beach">
+            <i class="fas fa-umbrella-beach"></i>
+            Beach
+          </button>
+          <button class="filter-tab" data-category="cultural">
+            <i class="fas fa-landmark"></i>
+            Cultural
+          </button>
+          <button class="filter-tab" data-category="luxury">
+            <i class="fas fa-gem"></i>
+            Luxury
+          </button>
+        </div>
+      </div>
+
+      <!-- Package Results -->
+      <div class="packages-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-fire"></i>
+            Featured Packages
+          </h2>
+          <div class="view-options">
+            <button class="view-btn active" data-view="grid">
+              <i class="fas fa-th-large"></i>
+            </button>
+            <button class="view-btn" data-view="list">
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="packages-grid" id="packagesList">
+          <!-- packages loaded by JS -->
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dashboard initialization
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+          }
+        });
+      }
+      
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = 'login.html';
+          }
+        });
+      }
+      
+      // Packages functionality
+      const packagesList = document.getElementById('packagesList');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const viewBtns = document.querySelectorAll('.view-btn');
+      
+      // Listen for profile updates
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'travelEaseUser') {
+          updateUserDisplays();
+        }
+      });
+      
+      window.addEventListener('profileUpdated', function(e) {
+        updateUserDisplays();
+      });
+      
+      // Initialize user displays
+      updateUserDisplays();
+      
+      // Enhanced package data with categories
+      const packages = [
+        {
+          id: 1,
+          name: 'Tropical Paradise Getaway',
+          location: 'Bali, Indonesia',
+          description: 'Experience the ultimate tropical paradise with pristine beaches, ancient temples, and luxurious resorts.',
+          details: '7 days in Bali',
+          price: 1299,
+          duration: '7 days / 6 nights',
+          category: 'beach',
+          features: ['All Inclusive', 'Beach Resort', 'Spa Access', 'Cultural Tours'],
+          rating: 4.8,
+          badge: 'Popular'
+        },
+        {
+          id: 2,
+          name: 'European Grand Tour',
+          location: 'Paris, Rome, Barcelona',
+          description: 'Discover the rich history and culture of Europe with visits to iconic cities and landmarks.',
+          details: '10 days multi-city tour',
+          price: 2899,
+          duration: '10 days / 9 nights',
+          category: 'cultural',
+          features: ['City Tours', 'Museums', 'Local Cuisine', 'Historic Sites'],
+          rating: 4.9,
+          badge: 'Best Seller'
+        },
+        {
+          id: 3,
+          name: 'Mountain Adventure Trek',
+          location: 'Nepal Himalayas',
+          description: 'Challenge yourself with breathtaking mountain views and an unforgettable trekking experience.',
+          details: '8 days mountain trekking',
+          price: 1599,
+          duration: '8 days / 7 nights',
+          category: 'adventure',
+          features: ['Professional Guide', 'Camping', 'Mountain Views', 'Local Culture'],
+          rating: 4.7,
+          badge: 'Adventure'
+        },
+        {
+          id: 4,
+          name: 'Luxury Safari Experience',
+          location: 'Kenya & Tanzania',
+          description: 'Witness the great migration and enjoy luxury accommodations in the heart of African wilderness.',
+          details: '6 days luxury safari',
+          price: 3499,
+          duration: '6 days / 5 nights',
+          category: 'luxury',
+          features: ['Luxury Lodges', 'Game Drives', 'Professional Guide', 'All Meals'],
+          rating: 4.9,
+          badge: 'Exclusive'
+        },
+        {
+          id: 5,
+          name: 'Amazon Rainforest Explorer',
+          location: 'Peru & Brazil',
+          description: 'Immerse yourself in the world\'s largest rainforest and discover incredible wildlife.',
+          details: '9 days rainforest adventure',
+          price: 2199,
+          duration: '9 days / 8 nights',
+          category: 'adventure',
+          features: ['Jungle Lodge', 'Wildlife Tours', 'River Cruises', 'Local Guides'],
+          rating: 4.6
+        },
+        {
+          id: 6,
+          name: 'Greek Island Hopping',
+          location: 'Santorini, Mykonos, Crete',
+          description: 'Explore the stunning Greek islands with crystal clear waters and whitewashed villages.',
+          details: '8 days island hopping',
+          price: 1899,
+          duration: '8 days / 7 nights',
+          category: 'beach',
+          features: ['Island Ferry', 'Beach Hotels', 'Local Cuisine', 'Historic Sites'],
+          rating: 4.8
+        }
+      ];
+      
+      let currentCategory = 'all';
+      let currentView = 'grid';
+      
+      // Initialize display
+      displayPackages(packages);
+      
+      // Category filter functionality
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Update active tab
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Filter packages
+          currentCategory = tab.dataset.category;
+          const filteredPackages = currentCategory === 'all' 
+            ? packages 
+            : packages.filter(pkg => pkg.category === currentCategory);
+          
+          displayPackages(filteredPackages);
+        });
+      });
+      
+      // View toggle functionality
+      viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          viewBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          currentView = btn.dataset.view;
+          
+          if (currentView === 'list') {
+            packagesList.classList.add('list-view');
+          } else {
+            packagesList.classList.remove('list-view');
+          }
+        });
+      });
+      
+      function displayPackages(packagesToShow) {
+        if (!packagesList) return;
+        
+        let html = '';
+        packagesToShow.forEach(pkg => {
+          const categoryIcons = {
+            adventure: 'fa-mountain',
+            beach: 'fa-umbrella-beach',
+            cultural: 'fa-landmark',
+            luxury: 'fa-gem'
+          };
+          
+          const icon = categoryIcons[pkg.category] || 'fa-suitcase';
+          
+          html += `
+            <div class="package-card" data-category="${pkg.category}">
+              <div class="package-image">
+                <i class="fas ${icon}"></i>
+                ${pkg.badge ? `<div class="package-badge">${pkg.badge}</div>` : ''}
+              </div>
+              <div class="package-content">
+                <div class="package-header">
+                  <h3 class="package-title">${pkg.name}</h3>
+                  <div class="package-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${pkg.location}
+                  </div>
+                </div>
+                
+                <div class="package-details">
+                  <p class="package-description">${pkg.description}</p>
+                  <div class="package-features">
+                    ${pkg.features.map(feature => `<span class="package-feature">${feature}</span>`).join('')}
+                  </div>
+                  <div class="package-duration">
+                    <i class="fas fa-clock"></i>
+                    ${pkg.duration}
+                  </div>
+                </div>
+                
+                <div class="package-footer">
+                  <div class="package-price">
+                    <div class="price-amount">$${pkg.price.toLocaleString()}</div>
+                    <div class="price-period">per person</div>
+                  </div>
+                  <button class="book-package-btn" data-id="${pkg.id}">
+                    <i class="fas fa-suitcase"></i>
+                    Book Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        packagesList.innerHTML = html;
+        
+        // Add booking event listeners
+        packagesList.querySelectorAll('.book-package-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const pkgId = btn.getAttribute('data-id');
+            const pkg = packages.find(p => p.id == pkgId);
+            bookPackage(pkg);
+          });
+        });
+      }
+      
+      function bookPackage(pkg) {
+        // Get current user data including wallet balance
+        const userData = JSON.parse(localStorage.getItem('travelEaseUser')) || { balance: 250.00 };
+        const currentBalance = userData.balance || 250.00;
+        
+        // Check if wallet has sufficient balance
+        if (currentBalance < pkg.price) {
+          // Show insufficient balance error
+          showInsufficientBalanceError(pkg.price, currentBalance);
+          return;
+        }
+        
+        // Deduct amount from wallet
+        const newBalance = currentBalance - pkg.price;
+        userData.balance = newBalance;
+        localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+        
+        // Create booking record
+        const booking = {
+          id: Date.now(),
+          type: 'package',
+          name: pkg.name,
+          location: pkg.location,
+          duration: pkg.duration,
+          price: pkg.price,
+          features: pkg.features,
+          bookingDate: new Date().toISOString().split('T')[0],
+          bookingTime: new Date().toLocaleString(),
+          status: 'confirmed'
+        };
+        
+        // Save to upcoming trips
+        const upcomingTrips = JSON.parse(localStorage.getItem('upcomingTrips')) || [];
+        upcomingTrips.unshift(booking); // Add to beginning of array for recent bookings
+        localStorage.setItem('upcomingTrips', JSON.stringify(upcomingTrips));
+        
+        // Add wallet transaction record
+        addWalletTransaction({
+          type: 'payment',
+          title: `Package Booking - ${pkg.name}`,
+          date: new Date().toLocaleString(),
+          method: 'Wallet Balance',
+          amount: -pkg.price
+        });
+        
+        // Show success message
+        showBookingSuccessMessage(pkg, newBalance);
+        
+        // Trigger dashboard update across tabs/windows
+        console.log('📦 Package booked, triggering dashboard update...');
+        triggerDashboardUpdate();
+        console.log('✅ Dashboard update triggered successfully!');
+        
+        // Also log the booking data for debugging
+        console.log('Booking created:', booking);
+        console.log('Current upcomingTrips:', JSON.parse(localStorage.getItem('upcomingTrips')));
+      }
+      
+      function showInsufficientBalanceError(packagePrice, currentBalance) {
+        const shortfall = packagePrice - currentBalance;
+        alert(`❌ Insufficient Balance\n\nPackage Price: $${packagePrice.toLocaleString()}\nYour Balance: $${currentBalance.toFixed(2)}\nShortfall: $${shortfall.toFixed(2)}\n\nPlease add funds to your wallet to complete this booking.`);
+      }
+      
+      function showBookingSuccessMessage(pkg, newBalance) {
+        alert(`✅ Package Booked Successfully!\n\nPackage: ${pkg.name}\nLocation: ${pkg.location}\nDuration: ${pkg.duration}\nAmount Paid: $${pkg.price.toLocaleString()}\n\nRemaining Balance: $${newBalance.toFixed(2)}\n\nBooking confirmation will be sent to your email.`);
+      }
+      
+      function addWalletTransaction(transactionData) {
+        // Get existing transactions
+        let transactions = JSON.parse(localStorage.getItem('walletTransactions')) || [];
+        
+        // Create new transaction
+        const newTransaction = {
+          id: Date.now(),
+          timestamp: Date.now(),
+          ...transactionData
+        };
+        
+        // Add to beginning of transactions array
+        transactions.unshift(newTransaction);
+        
+        // Save back to localStorage
+        localStorage.setItem('walletTransactions', JSON.stringify(transactions));
+      }
+      
+      // Add smooth scrolling to package cards on hover
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('.package-card')) {
+          e.target.closest('.package-card').style.transform = 'translateY(-8px)';
+        }
+      });
+      
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.closest('.package-card')) {
+          e.target.closest('.package-card').style.transform = 'translateY(0)';
+        }
+      });
+      
+      // Update user displays across the page
+      function updateUserDisplays() {
+        const userData = JSON.parse(localStorage.getItem('travelEaseUser')) || {
+          username: 'User',
+          avatar: '../assets/images/img1.png'
+        };
+        
+        // Update header user info
+        const headerUsername = document.getElementById('username');
+        const headerAvatar = document.getElementById('userAvatar');
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        
+        if (headerUsername) headerUsername.textContent = userData.username;
+        if (headerAvatar) headerAvatar.src = userData.avatar;
+        if (sidebarUsername) sidebarUsername.textContent = userData.username;
+        if (sidebarAvatar) sidebarAvatar.src = userData.avatar;
+      }
+      
+      // Trigger dashboard update when a booking is made
+      function triggerDashboardUpdate() {
+        // Create a custom storage event to notify dashboard
+        const dashboardUpdateEvent = {
+          key: 'dashboardUpdate',
+          newValue: Date.now().toString(),
+          type: 'bookingMade'
+        };
+        
+        // Dispatch custom event for same-window communication
+        window.dispatchEvent(new CustomEvent('bookingMade', {
+          detail: { timestamp: Date.now() }
+        }));
+        
+        // Use localStorage to trigger storage events across tabs/windows
+        localStorage.setItem('lastBookingUpdate', Date.now().toString());
+        
+        // Also trigger a manual storage event for cross-tab communication
+        try {
+          window.dispatchEvent(new StorageEvent('storage', {
+            key: 'upcomingTrips',
+            newValue: localStorage.getItem('upcomingTrips'),
+            url: window.location.href
+          }));
+        } catch (e) {
+          // Fallback for browsers that don't support StorageEvent constructor
+          console.log('Booking made - dashboard should update');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -61,35 +61,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from public directory with proper configuration
-app.use(express.static(path.join(__dirname, 'public'), {
-    // Set proper MIME types
-    setHeaders: (res, path, stat) => {
-        // Handle CSS files
-        if (path.endsWith('.css')) {
-            res.set('Content-Type', 'text/css');
-        }
-        // Handle JS files
-        if (path.endsWith('.js')) {
-            res.set('Content-Type', 'application/javascript');
-        }
-        // Handle image files
-        if (path.endsWith('.webp')) {
-            res.set('Content-Type', 'image/webp');
-        }
-        if (path.endsWith('.jpg') || path.endsWith('.jpeg')) {
-            res.set('Content-Type', 'image/jpeg');
-        }
-        if (path.endsWith('.png')) {
-            res.set('Content-Type', 'image/png');
-        }
-        // Enable caching for static assets
-        res.set('Cache-Control', 'public, max-age=31536000');
-    },
-    // Disable directory browsing
-    index: false,
-    // Enable case-insensitive file matching for better Linux compatibility
-    caseSensitive: false
-}));
+
 
 // API Routes with proper error handling and logging
 app.use('/api/health', healthRoutes); // Health check routes (no auth required)

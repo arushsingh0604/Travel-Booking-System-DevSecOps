@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings - TravelEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dark: #d97706;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --text-dark: var(--text-primary);
+  --border: var(--border-light);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: var(--font-size-base); line-height: 1.6; color: var(--text-primary); background: var(--bg-secondary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+input, textarea, select { font-family: inherit; font-size: inherit; transition: all 0.2s ease; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: var(--font-size-sm); font-weight: 500; border-radius: var(--radius-lg); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--text-white); box-shadow: var(--shadow-sm); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn-lg { padding: 1rem 2rem; font-size: var(--font-size-lg); border-radius: var(--radius-xl); }
+.btn-sm { padding: 0.5rem 1rem; font-size: var(--font-size-xs); }
+.btn-accent { background: var(--accent); color: var(--text-white); }
+.btn-accent:hover:not(:disabled) { background: var(--accent-dark); }
+
+.page-fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Dashboard styles */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 280px 1fr;
+}
+
+.dashboard-header {
+  grid-area: header;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 1.5rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.search-bar input {
+  width: 320px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--danger);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+  background: var(--gray-100);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.5rem 0;
+}
+
+.logout-btn {
+  color: var(--danger);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-light);
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  position: sticky;
+  top: 70px;
+}
+
+.sidebar-content {
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-xl);
+  margin-bottom: 2rem;
+}
+
+.user-avatar-large {
+  position: relative;
+}
+
+.user-avatar-large img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+.status-indicator.online {
+  background: var(--success);
+}
+
+.user-info h3 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.user-status {
+  font-size: var(--font-size-xs);
+  color: var(--accent);
+  font-weight: 500;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nav-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--gray-100);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-item i {
+  width: 20px;
+  font-size: 1.125rem;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--gray-300);
+  color: var(--text-white);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.nav-item.active .nav-badge {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-badge.new {
+  background: var(--accent);
+}
+
+.main-content {
+  grid-area: main;
+  padding: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.content-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.header-actions-mobile {
+  display: none;
+}
+
+/* Settings Navigation Tabs */
+.settings-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.settings-tab {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.settings-tab:hover {
+  color: var(--primary);
+  background: rgba(0, 102, 204, 0.08);
+}
+
+.settings-tab.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Settings Content */
+.settings-content {
+  display: none;
+}
+
+.settings-content:first-of-type {
+  display: block;
+}
+
+/* Profile Section */
+.profile-section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.section-title {
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+}
+
+/* Avatar Section */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.avatar-upload {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-upload img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.avatar-edit-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.avatar-edit-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.avatar-info {
+  flex: 1;
+}
+
+.avatar-info h3 {
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.user-email {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.membership-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.membership-badge.premium {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+}
+
+/* Profile Form */
+.profile-form {
+  margin-top: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* Security Section */
+.security-section {
+  margin-bottom: 40px;
+}
+
+.security-cards {
+  display: grid;
+  gap: 20px;
+}
+
+.security-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.security-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.security-info {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.security-info h3 {
+  color: var(--text-dark);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.security-info p {
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Preferences Section */
+.preferences-section {
+  margin-bottom: 40px;
+}
+
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.preference-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+}
+
+.preference-card h3 {
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Notifications Section */
+.notifications-section {
+  margin-bottom: 40px;
+}
+
+.notification-groups {
+  display: grid;
+  gap: 32px;
+}
+
+.notification-group {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+}
+
+.notification-group h3 {
+  color: var(--text-dark);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.notification-options {
+  display: grid;
+  gap: 12px;
+}
+
+.toggle-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.toggle-option:last-child {
+  border-bottom: none;
+}
+
+.toggle-option input[type="checkbox"] {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 24px;
+  margin-right: 12px;
+  transition: background 0.3s ease;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-option input[type="checkbox"]:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-option input[type="checkbox"]:checked + .toggle-slider::before {
+  transform: translateX(24px);
+}
+
+.toggle-label {
+  flex: 1;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-wrapper {
+    grid-template-columns: 240px 1fr;
+  }
+  
+  .search-bar input {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    grid-template-areas:
+      "header"
+      "main";
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  .search-bar {
+    display: none;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .header-actions-mobile {
+    display: block;
+  }
+  
+  .settings-tabs {
+    justify-content: flex-start;
+  }
+  
+  .settings-tab {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .avatar-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .security-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .security-info {
+    margin-right: 0;
+  }
+  
+  .preferences-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .user-menu-trigger span {
+    display: none;
+  }
+}
+  </style>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-wrapper page-fade-in">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="brand">
+          <img src="../assets/images/img2.webp" alt="TravelEase" class="brand-logo">
+          <span class="brand-name">TravelEase</span>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search settings...">
+        </div>
+        
+        <div class="header-actions">
+          <button class="icon-btn notifications-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          
+          <div class="user-menu">
+            <button class="user-menu-trigger">
+              <img id="userAvatar" src="../assets/images/img1.png" alt="Avatar" class="user-avatar">
+              <span id="username">Yash Mittal</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown">
+              <a href="profile.html" class="dropdown-item">
+                <i class="fas fa-user"></i> Profile
+              </a>
+              <a href="wallet.html" class="dropdown-item">
+                <i class="fas fa-wallet"></i> Wallet
+              </a>
+              <div class="dropdown-divider"></div>
+              <button id="logoutBtn" class="dropdown-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-user">
+          <div class="user-avatar-large">
+            <img id="sidebarAvatar" src="../assets/images/img1.png" alt="Avatar">
+            <div class="status-indicator online"></div>
+          </div>
+          <div class="user-info">
+            <h3 id="sidebarUsername">Yash Mittal</h3>
+            <p class="user-status">Premium Member</p>
+          </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="dashboard.html" class="nav-item">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Booking</span>
+            <a href="flights.html" class="nav-item">
+              <i class="fas fa-plane-departure"></i>
+              <span>Flights</span>
+              <span class="nav-badge">2</span>
+            </a>
+            <a href="hotels.html" class="nav-item">
+              <i class="fas fa-bed"></i>
+              <span>Hotels</span>
+            </a>
+            <a href="packages.html" class="nav-item">
+              <i class="fas fa-suitcase"></i>
+              <span>Packages</span>
+              <span class="nav-badge new">New</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <span class="nav-section-title">Account</span>
+            <a href="offers.html" class="nav-item">
+              <i class="fas fa-percent"></i>
+              <span>Offers</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+              <i class="fas fa-wallet"></i>
+              <span>Wallet</span>
+            </a>
+            <a href="profile.html" class="nav-item active">
+              <i class="fas fa-user-cog"></i>
+              <span>Settings</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-header">
+        <div class="page-title">
+          <h1><i class="fas fa-user-cog"></i> Profile Settings</h1>
+          <p class="page-subtitle">Manage your account information and preferences</p>
+        </div>
+      </div>
+
+      <!-- Settings Navigation -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="profile">
+          <i class="fas fa-user"></i>
+          Profile Info
+        </button>
+        <button class="settings-tab" data-tab="security">
+          <i class="fas fa-shield-alt"></i>
+          Security
+        </button>
+        <button class="settings-tab" data-tab="preferences">
+          <i class="fas fa-cog"></i>
+          Preferences
+        </button>
+        <button class="settings-tab" data-tab="notifications">
+          <i class="fas fa-bell"></i>
+          Notifications
+        </button>
+      </div>
+
+      <!-- Profile Info Tab -->
+      <div class="settings-content" id="profile-tab">
+        <div class="profile-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-user-circle"></i>
+              Personal Information
+            </h2>
+            <button class="btn btn-outline" id="editProfileBtn">
+              <i class="fas fa-edit"></i>
+              Edit Profile
+            </button>
+          </div>
+          
+          <div class="profile-card">
+            <div class="avatar-section">
+              <div class="avatar-upload">
+                <img id="profileAvatar" src="../assets/images/img1.png" alt="User Avatar">
+                <button class="avatar-edit-btn" id="editAvatarBtn">
+                  <i class="fas fa-camera"></i>
+                </button>
+                <button class="avatar-reset-btn" id="resetAvatarBtn" style="position: absolute; bottom: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--danger); color: white; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px;">
+                  <i class="fas fa-times"></i>
+                </button>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+              </div>
+              <div class="avatar-info">
+                <h3 id="displayName">Yash Mittal</h3>
+                <p class="user-email" id="displayEmail">yash.mittal@example.com</p>
+                <span class="membership-badge premium">
+                  <i class="fas fa-crown"></i>
+                  Premium Member
+                </span>
+              </div>
+            </div>
+            
+            <form id="profileForm" class="profile-form" style="display: none;">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-user"></i>
+                    Full Name
+                  </label>
+                  <input type="text" id="profileUsername" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-envelope"></i>
+                    Email Address
+                  </label>
+                  <input type="email" id="profileEmail" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-phone"></i>
+                    Phone Number
+                  </label>
+                  <input type="tel" id="profilePhone" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-birthday-cake"></i>
+                    Date of Birth
+                  </label>
+                  <input type="date" id="profileDob" class="form-input">
+                </div>
+                
+                <div class="form-group full-width">
+                  <label class="form-label">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Address
+                  </label>
+                  <textarea id="profileAddress" class="form-input" rows="3" placeholder="Your address..."></textarea>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" id="cancelProfileBtn">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save"></i>
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Tab -->
+      <div class="settings-content" id="security-tab" style="display: none;">
+        <div class="security-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-shield-alt"></i>
+              Account Security
+            </h2>
+          </div>
+          
+          <div class="security-cards">
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Change Password</h3>
+                <p>Update your password regularly to keep your account secure</p>
+              </div>
+              <button class="btn btn-outline">
+                <i class="fas fa-key"></i>
+                Update Password
+              </button>
+            </div>
+            
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Two-Factor Authentication</h3>
+                <p>Add an extra layer of security to your account</p>
+              </div>
+              <button class="btn btn-primary">
+                <i class="fas fa-mobile-alt"></i>
+                Enable 2FA
+              </button>
+            </div>
+            
+            <div class="security-card">
+              <div class="security-info">
+                <h3>Login History</h3>
+                <p>Review recent login activity on your account</p>
+              </div>
+              <button class="btn btn-outline">
+                <i class="fas fa-history"></i>
+                View Activity
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences Tab -->
+      <div class="settings-content" id="preferences-tab" style="display: none;">
+        <div class="preferences-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-sliders-h"></i>
+              Travel Preferences
+            </h2>
+          </div>
+          
+          <div class="preferences-grid">
+            <div class="preference-card">
+              <h3>Currency</h3>
+              <select class="form-select">
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+              </select>
+            </div>
+            
+            <div class="preference-card">
+              <h3>Language</h3>
+              <select class="form-select">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+              </select>
+            </div>
+            
+            <div class="preference-card">
+              <h3>Time Zone</h3>
+              <select class="form-select">
+                <option value="UTC-5">Eastern Time (UTC-5)</option>
+                <option value="UTC-6">Central Time (UTC-6)</option>
+                <option value="UTC-7">Mountain Time (UTC-7)</option>
+                <option value="UTC-8">Pacific Time (UTC-8)</option>
+              </select>
+            </div>
+            
+            <div class="preference-card">
+              <h3>Seat Preference</h3>
+              <select class="form-select">
+                <option value="window">Window</option>
+                <option value="aisle">Aisle</option>
+                <option value="middle">Middle</option>
+                <option value="any">No Preference</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Tab -->
+      <div class="settings-content" id="notifications-tab" style="display: none;">
+        <div class="notifications-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-bell"></i>
+              Notification Settings
+            </h2>
+          </div>
+          
+          <div class="notification-groups">
+            <div class="notification-group">
+              <h3>Booking Updates</h3>
+              <div class="notification-options">
+                <label class="toggle-option">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Booking confirmations</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Flight status changes</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Check-in reminders</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="notification-group">
+              <h3>Promotional</h3>
+              <div class="notification-options">
+                <label class="toggle-option">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Special offers</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Newsletter</span>
+                </label>
+                <label class="toggle-option">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Partner promotions</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dashboard initialization
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+          }
+        });
+      }
+      
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = 'login.html';
+          }
+        });
+      }
+      
+      // Profile functionality - load existing user data or get from current session
+      let userData = JSON.parse(localStorage.getItem('travelEaseUser')) || {
+        username: 'pul01',
+        email: 'pul01@example.com',
+        avatar: null // Start with null so default avatar is used consistently
+      };
+      
+      // If no saved user data, try to get current user info from login session
+      if (!localStorage.getItem('travelEaseUser')) {
+        const currentUserEmail = localStorage.getItem('currentUserEmail');
+        if (currentUserEmail) {
+          // Try to find user data from existing users
+          const allUsers = JSON.parse(localStorage.getItem('travelEaseUsers')) || {};
+          if (allUsers[currentUserEmail]) {
+            userData = { ...allUsers[currentUserEmail] };
+          } else {
+            // Create new user data based on email
+            userData.email = currentUserEmail;
+            userData.username = currentUserEmail.split('@')[0];
+          }
+        }
+        // Save the userData for future use
+        localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+      }
+    
+      // Settings tabs functionality
+      const settingsTabs = document.querySelectorAll('.settings-tab');
+      const settingsContents = document.querySelectorAll('.settings-content');
+      
+      // Profile form elements
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      const profileForm = document.getElementById('profileForm');
+      const cancelProfileBtn = document.getElementById('cancelProfileBtn');
+      const editAvatarBtn = document.getElementById('editAvatarBtn');
+      const resetAvatarBtn = document.getElementById('resetAvatarBtn');
+      const avatarInput = document.getElementById('avatarInput');
+      
+      // Display elements
+      const displayName = document.getElementById('displayName');
+      const displayEmail = document.getElementById('displayEmail');
+      const profileAvatar = document.getElementById('profileAvatar');
+      
+      // Form inputs
+      const usernameInput = document.getElementById('profileUsername');
+      const emailInput = document.getElementById('profileEmail');
+      const phoneInput = document.getElementById('profilePhone');
+      const dobInput = document.getElementById('profileDob');
+      const addressInput = document.getElementById('profileAddress');
+      
+      // Initialize profile display
+      loadProfileData();
+      
+      // Initialize header and sidebar avatars on page load
+      updateUserDisplays();
+      
+      // Settings tabs navigation
+      settingsTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetTab = tab.dataset.tab;
+          
+          // Remove active class from all tabs
+          settingsTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Hide all content sections
+          settingsContents.forEach(content => {
+            content.style.display = 'none';
+          });
+          
+          // Show target content
+          const targetContent = document.getElementById(targetTab + '-tab');
+          if (targetContent) {
+            targetContent.style.display = 'block';
+          }
+        });
+      });
+      
+      // Edit profile button
+      if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', () => {
+          toggleProfileEditMode(true);
+        });
+      }
+      
+      // Cancel profile edit
+      if (cancelProfileBtn) {
+        cancelProfileBtn.addEventListener('click', () => {
+          toggleProfileEditMode(false);
+          loadProfileData(); // Reset form data
+        });
+      }
+      
+      // Avatar edit button
+      if (editAvatarBtn) {
+        editAvatarBtn.addEventListener('click', () => {
+          avatarInput.click();
+        });
+      }
+      
+      // Avatar reset button
+      if (resetAvatarBtn) {
+        resetAvatarBtn.addEventListener('click', () => {
+          if (confirm('Reset avatar to default?')) {
+            userData.avatar = null; // Remove custom avatar
+            localStorage.setItem('travelEaseUser', JSON.stringify(userData)); // Save changes
+            updateAvatarDisplay();
+            updateResetButtonVisibility();
+            updateUserDisplays(); // Update header and sidebar
+          }
+        });
+      }
+      
+      // Avatar upload handler
+      if (avatarInput) {
+        avatarInput.addEventListener('change', e => {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          // Validate file type
+          if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+          }
+          
+          // Validate file size (max 5MB)
+          if (file.size > 5 * 1024 * 1024) {
+            alert('Image file size should be less than 5MB.');
+            return;
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            if (profileAvatar) {
+              // Update the profile avatar image
+              profileAvatar.src = evt.target.result;
+              profileAvatar.style.display = 'block';
+              
+              // Update userData with new avatar
+              userData.avatar = evt.target.result;
+              
+              // Save to localStorage immediately
+              localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+              
+              // Update all avatar displays (header and sidebar)
+              updateUserDisplays();
+              
+              // Update reset button visibility
+              updateResetButtonVisibility();
+              
+              // Remove any default icon if it exists
+              const avatarIcon = document.querySelector('.default-avatar-icon');
+              if (avatarIcon) {
+                avatarIcon.remove();
+              }
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      // Profile form submission
+      if (profileForm) {
+        profileForm.addEventListener('submit', e => {
+          e.preventDefault();
+          
+          // Validate form
+          if (!usernameInput.value.trim() || !emailInput.value.trim()) {
+            alert('Please fill in all required fields.');
+            return;
+          }
+          
+          // Validate email format
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(emailInput.value.trim())) {
+            alert('Please enter a valid email address.');
+            return;
+          }
+          
+          // Update user data
+          userData = {
+            ...userData,
+            username: usernameInput.value.trim(),
+            email: emailInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            dateOfBirth: dobInput.value,
+            address: addressInput.value.trim(),
+            avatar: profileAvatar.src
+          };
+          
+          // Save to localStorage
+          localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+          
+          // Update display
+          loadProfileData();
+          toggleProfileEditMode(false);
+          
+          // Update header and sidebar user info
+          updateUserDisplays();
+          
+          // Trigger profile update event for other pages to detect changes
+          triggerProfileUpdateEvent();
+          
+          alert('Profile updated successfully!');
+        });
+      }
+      
+      // Security actions
+      const securityButtons = document.querySelectorAll('.security-card .btn');
+      securityButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const action = e.target.textContent.trim();
+          
+          if (action.includes('Update Password')) {
+            handlePasswordUpdate();
+          } else if (action.includes('Enable 2FA')) {
+            handleTwoFactorAuth();
+          } else if (action.includes('View Activity')) {
+            handleLoginHistory();
+          }
+        });
+      });
+      
+      // Notification toggles
+      const notificationToggles = document.querySelectorAll('.toggle-option input[type="checkbox"]');
+      notificationToggles.forEach(toggle => {
+        toggle.addEventListener('change', () => {
+          const setting = toggle.parentElement.querySelector('.toggle-label').textContent;
+          saveNotificationSetting(setting, toggle.checked);
+        });
+      });
+      
+      // Preference selects
+      const preferenceSelects = document.querySelectorAll('.form-select');
+      preferenceSelects.forEach(select => {
+        select.addEventListener('change', () => {
+          const preference = select.parentElement.querySelector('h3').textContent;
+          savePreference(preference, select.value);
+        });
+      });
+      
+      function loadProfileData() {
+        if (displayName) displayName.textContent = userData.username || 'User';
+        if (displayEmail) displayEmail.textContent = userData.email || '';
+        
+        // Handle avatar display based on user data
+        updateAvatarDisplay();
+        updateResetButtonVisibility();
+        
+        if (usernameInput) usernameInput.value = userData.username || '';
+        if (emailInput) emailInput.value = userData.email || '';
+        if (phoneInput) phoneInput.value = userData.phone || '';
+        if (dobInput) dobInput.value = userData.dateOfBirth || '';
+        if (addressInput) addressInput.value = userData.address || '';
+      }
+      
+      function updateAvatarDisplay() {
+        if (!profileAvatar) return;
+        
+        // Use the same logic as dashboard - simple and consistent
+        let userAvatar = userData.avatar;
+        
+        if (!userAvatar) {
+          userAvatar = '../assets/images/img1.png'; // Default avatar image
+        }
+        
+        // Simply set the src - no complex hide/show logic
+        profileAvatar.src = userAvatar;
+        profileAvatar.style.display = 'block';
+        
+        // Remove any default icon if it exists
+        const avatarIcon = document.querySelector('.default-avatar-icon');
+        if (avatarIcon) {
+          avatarIcon.remove();
+        }
+      }
+      
+      function updateResetButtonVisibility() {
+        if (!resetAvatarBtn) return;
+        
+        // Show reset button only if user has uploaded a custom avatar
+        const hasCustomAvatar = userData.avatar && 
+                               userData.avatar.startsWith('data:image/');
+        
+        resetAvatarBtn.style.display = hasCustomAvatar ? 'flex' : 'none';
+      }
+      
+      function toggleProfileEditMode(editMode) {
+        if (profileForm) {
+          profileForm.style.display = editMode ? 'block' : 'none';
+        }
+        
+        if (editProfileBtn) {
+          editProfileBtn.style.display = editMode ? 'none' : 'inline-flex';
+        }
+      }
+      
+      function updateUserDisplays() {
+        // Update header user info - use same logic as dashboard
+        const headerUsername = document.getElementById('username');
+        const headerAvatar = document.getElementById('userAvatar');
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        
+        let userAvatar = userData.avatar;
+        if (!userAvatar) {
+          userAvatar = '../assets/images/img1.png'; // Default avatar image
+        }
+        
+        if (headerUsername) headerUsername.textContent = userData.username;
+        if (headerAvatar) headerAvatar.src = userAvatar;
+        if (sidebarUsername) sidebarUsername.textContent = userData.username;
+        if (sidebarAvatar) sidebarAvatar.src = userAvatar;
+      }
+      
+      function handlePasswordUpdate() {
+        const currentPassword = prompt('Enter your current password:');
+        if (!currentPassword) return;
+        
+        const newPassword = prompt('Enter your new password:');
+        if (!newPassword) return;
+        
+        const confirmPassword = prompt('Confirm your new password:');
+        if (newPassword !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+        
+        if (newPassword.length < 8) {
+          alert('Password must be at least 8 characters long.');
+          return;
+        }
+        
+        // In a real app, this would make an API call
+        userData.password = newPassword;
+        localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+        alert('Password updated successfully!');
+      }
+      
+      function handleTwoFactorAuth() {
+        const phone = prompt('Enter your phone number for 2FA setup:');
+        if (!phone) return;
+        
+        // In a real app, this would send a verification code
+        const code = prompt('Enter the verification code sent to your phone:');
+        if (!code) return;
+        
+        userData.twoFactorEnabled = true;
+        userData.twoFactorPhone = phone;
+        localStorage.setItem('travelEaseUser', JSON.stringify(userData));
+        alert('Two-factor authentication enabled successfully!');
+      }
+      
+      function handleLoginHistory() {
+        const loginHistory = [
+          'Today, 9:30 AM - Current session',
+          'Yesterday, 6:45 PM - Chrome on Windows',
+          '2 days ago, 2:15 PM - Safari on iPhone',
+          '3 days ago, 8:20 AM - Chrome on Windows'
+        ];
+        
+        alert('Recent Login Activity:\n\n' + loginHistory.join('\n'));
+      }
+      
+      function saveNotificationSetting(setting, enabled) {
+        const notifications = JSON.parse(localStorage.getItem('notificationSettings')) || {};
+        notifications[setting] = enabled;
+        localStorage.setItem('notificationSettings', JSON.stringify(notifications));
+      }
+      
+      function savePreference(preference, value) {
+        const preferences = JSON.parse(localStorage.getItem('userPreferences')) || {};
+        preferences[preference] = value;
+        localStorage.setItem('userPreferences', JSON.stringify(preferences));
+        
+        // Show confirmation
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: var(--primary);
+          color: white;
+          padding: 12px 20px;
+          border-radius: 8px;
+          z-index: 1000;
+          font-weight: 500;
+        `;
+        toast.textContent = `${preference} updated to ${value}`;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 3000);
+      }
+      
+      // Load saved preferences on page load
+      function loadPreferences() {
+        const preferences = JSON.parse(localStorage.getItem('userPreferences')) || {};
+        
+        preferenceSelects.forEach(select => {
+          const preference = select.parentElement.querySelector('h3').textContent;
+          if (preferences[preference]) {
+            select.value = preferences[preference];
+          }
+        });
+      }
+      
+      // Load saved notification settings
+      function loadNotificationSettings() {
+        const notifications = JSON.parse(localStorage.getItem('notificationSettings')) || {};
+        
+        notificationToggles.forEach(toggle => {
+          const setting = toggle.parentElement.querySelector('.toggle-label').textContent;
+          if (notifications.hasOwnProperty(setting)) {
+            toggle.checked = notifications[setting];
+          }
+        });
+      }
+      
+      // Initialize preferences and notification settings
+      loadPreferences();
+      loadNotificationSettings();
+      
+      function triggerProfileUpdateEvent() {
+        // Trigger a custom event to notify other scripts
+        const event = new CustomEvent('profileUpdated', {
+          detail: {
+            userData: userData
+          }
+        });
+        window.dispatchEvent(event);
+        
+        // Also trigger a storage event manually for same-page detection
+        if (typeof window.StorageEvent === 'function') {
+          const storageEvent = new StorageEvent('storage', {
+            key: 'travelEaseUser',
+            newValue: JSON.stringify(userData),
+            storageArea: localStorage
+          });
+          window.dispatchEvent(storageEvent);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Dependency folder (this is the most important one)
+node_modules
+
+# Git files
+.git
+.gitignore
+
+# Docker files (don't need to be copied into the image)
+Dockerfile
+.dockerignore
+
+# Environment files
+.env
+.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
