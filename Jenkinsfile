@@ -9,17 +9,21 @@ pipeline {
         AWS_DEFAULT_REGION = 'ap-south-1'
         AWS_CREDENTIALS = credentials('AWS_CREDS')
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDS')
-
+        
         // --- NEW ---
-        // Added a variable for your new frontend image name
-        FRONTEND_DOCKERHUB_REPO = 'arushsingh246/travel-booking-system-frontend:latest' 
+        // Your specific repository names
+        ECR_REGISTRY_URL = '881490098879.dkr.ecr.ap-south-1.amazonaws.com'
+        
+        BACKEND_ECR_REPO = "${ECR_REGISTRY_URL}/devops/travel-booking-system-backend"
+        FRONTEND_ECR_REPO = "${ECR_REGISTRY_URL}/devops/travel-booking-system-frontend"
+        
+        BACKEND_DOCKERHUB_REPO = 'arushsingh246/travel-booking-system-backend'
+        FRONTEND_DOCKERHUB_REPO = 'arushsingh246/travel-booking-system-frontend'
     }
 
     parameters {
+        // This tag will be applied to all images
         string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'v1.0', description: 'Docker image tag')
-        string(name: 'REPO_NAME', defaultValue: 'travel-booking-system', description: 'Docker image base name')
-        string(name: 'ECR_REPO', defaultValue: '881490098879.dkr.ecr.ap-south-1.amazonaws.com/devops/travel-booking-system', description: 'AWS ECR repository')
-        string(name: 'DOCKERHUB_REPO', defaultValue: 'arushsingh246/travel-booking-system', description: 'DockerHub repository')
     }
 
     stages {
@@ -30,12 +34,10 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis (Backend)') { // --- CHANGED ---
+        stage('SonarQube Analysis (Backend)') {
             steps {
                 echo "🔍 Running SonarQube analysis on backend..."
                 withSonarQubeEnv(env.SONARQUBE_ENV) {
-                    // --- CHANGED ---
-                    // Run the scanner inside the 'backend' directory
                     sh """
                         cd backend && sonar-scanner \
                           -Dsonar.projectKey=Travel-Booking-System \
@@ -56,67 +58,68 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') { // --- CHANGED ---
+        stage('Build & Tag Docker Images') {
             steps {
                 echo "🐳 Building Backend Docker image..."
-                // --- CHANGED ---
-                // Specify the build context for the backend image
-                sh "docker build --no-cache -t ${REPO_NAME}:${DOCKER_IMAGE_TAG} ./backend"
+                // Build backend image
+                sh "docker build --no-cache -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend"
+                
+                echo "🏷 Tagging Backend image for ECR..."
+                // Tag backend image for ECR
+                sh "docker tag ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
 
                 echo "🏗️ Building Frontend Docker image..."
-                // --- NEW ---
-                // Build the new frontend image
-                sh "docker build -t ${FRONTEND_DOCKERHUB_REPO} ./frontend"
+                // Build frontend image
+                sh "docker build --no-cache -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
+                
+                echo "🏷 Tagging Frontend image for ECR..."
+                // Tag frontend image for ECR
+                sh "docker tag ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
             }
         }
 
-        stage('Security Scan - Trivy') { // --- CHANGED ---
+        stage('Security Scan - Trivy') {
             steps {
-                echo "🛡 Running Trivy security scan on Backend image..."
+                echo "🛡 Running Trivy scan on Backend image..."
                 sh """
-                    trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${REPO_NAME}:${DOCKER_IMAGE_TAG} || true
+                    trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} || true
                 """
                 
-                echo "🛡 Running Trivy security scan on Frontend image..."
-                // --- NEW ---
-                // Scan the new frontend image
+                echo "🛡 Running Trivy scan on Frontend image..."
                 sh """
-                    trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${FRONTEND_DOCKERHUB_REPO} || true
+                    trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} || true
                 """
             }
         }
 
-        stage('Push to AWS ECR & DockerHub') { // --- CHANGED ---
+        stage('Push to ECR & DockerHub') {
             steps {
                 script {
-                    echo "🚀 Pushing Backend image to ECR and DockerHub..."
-
-                    // --- AWS ECR (Backend) ---
+                    
+                    // --- Login to AWS ECR ---
+                    echo "🔒 Logging in to AWS ECR..."
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_CREDS']]) {
-                        sh """
-                            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin 881490098879.dkr.ecr.ap-south-1.amazonaws.com
-                            docker tag ${REPO_NAME}:${DOCKER_IMAGE_TAG} ${ECR_REPO}:${DOCKER_IMAGE_TAG}
-                            docker push ${ECR_REPO}:${DOCKER_IMAGE_TAG}
-                        """
+                        sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}"
                     }
 
-                    // --- DockerHub (Backend) ---
+                    // --- Login to DockerHub ---
+                    echo "🔒 Logging in to DockerHub..."
                     withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh """
-                            echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-                            docker tag ${REPO_NAME}:${DOCKER_IMAGE_TAG} ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}
-                            docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}
-                        """
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                     }
                     
+                    // --- Push Images ---
+                    echo "🚀 Pushing Backend image to ECR..."
+                    sh "docker push ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
+                    
+                    echo "🚀 Pushing Backend image to DockerHub..."
+                    sh "docker push ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
+                    
+                    echo "🚀 Pushing Frontend image to ECR..."
+                    sh "docker push ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
+                    
                     echo "🚀 Pushing Frontend image to DockerHub..."
-                    // --- NEW: DockerHub (Frontend) ---
-                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh """
-                            echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-                            docker push ${FRONTEND_DOCKERHUB_REPO}
-                        """
-                    }
+                    sh "docker push ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
                 }
             }
         }
@@ -124,7 +127,6 @@ pipeline {
         stage('Compose Validation (Optional)') {
             steps {
                 echo "🧩 Validating docker-compose.yml..."
-                // This command is still correct as docker-compose.yml is at the root
                 sh "docker-compose config || true"
             }
         }
@@ -133,6 +135,8 @@ pipeline {
     post {
         always {
             echo '📦 Pipeline completed.'
+            // Log out of DockerHub
+            sh "docker logout"
         }
         success {
             echo '✅ All checks passed.'
@@ -143,8 +147,13 @@ pipeline {
                     <p>Hi Arush,</p>
                     <p>The pipeline for <b>${env.JOB_NAME}</b> completed successfully.</p>
                     <p>Build URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>
-                    <p>Backend image <b>${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}</b> pushed to ECR & DockerHub.</p>
-                    <p>Frontend image <b>${FRONTEND_DOCKERHUB_REPO}</b> pushed to DockerHub.</p>
+                    <p><b>Images Pushed (Tag: ${DOCKER_IMAGE_TAG}):</b></p>
+                    <ul>
+                        <li><b>Backend (ECR):</b> ${BACKEND_ECR_REPO}</li>
+                        <li><b>Backend (DockerHub):</b> ${BACKEND_DOCKERHUB_REPO}</li>
+                        <li><b>Frontend (ECR):</b> ${FRONTEND_ECR_REPO}</li>
+                        <li><b>Frontend (DockerHub):</b> ${FRONTEND_DOCKERHUB_REPO}</li>
+                    </ul>
                     <p>Regards,<br>Jenkins CI</p>
                 """,
                 mimeType: 'text/html'
@@ -153,7 +162,7 @@ pipeline {
         failure {
             echo '❌ Pipeline failed.'
             emailext(
-                to: 'arushsingf0604@gmail.com', // Typo fixed from 'arushsingh0604@gmail.com'
+                to: 'arushsingh0604@gmail.com',
                 subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <p>Hi Arush,</p>
