@@ -54,7 +54,7 @@ pipeline {
                             -Dsonar.projectKey=Travel-Booking-System-DevSecOps \
                             -Dsonar.projectName='Travel Booking System DevSecOps' \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://13.235.242.71:9000 \
+                            -Dsonar.host.url=http://43.205.230.209:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
                             // ^ This new line tells SonarQube where to find your test coverage report
