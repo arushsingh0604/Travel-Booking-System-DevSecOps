@@ -57,7 +57,7 @@ pipeline {
                             -Dsonar.host.url=http://43.205.230.209:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                            // ^ This new line tells SonarQube where to find your test coverage report
+                             # ^ This new line tells SonarQube where to find your test coverage report
                     """
                 }
             }
