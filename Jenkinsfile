@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_ENV = 'SonarQube'
         SONAR_TOKEN = credentials('SONAR_TOKEN')
-        SONAR_HOST_URL = '13.235.242.71:9000'
+        SONAR_HOST_URL = '43.205.230.209:9000'
         PATH = "/opt/sonar-scanner/bin:$PATH"
         AWS_DEFAULT_REGION = 'ap-south-1'
         AWS_CREDENTIALS = credentials('AWS_CREDS')
