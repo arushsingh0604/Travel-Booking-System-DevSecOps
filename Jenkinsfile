@@ -34,17 +34,30 @@ pipeline {
             }
         }
 
+        // --- NEW STAGE ADDED HERE ---
+        stage('Unit Tests (Backend)') {
+            steps {
+                echo "🧪 Running Backend unit tests (Node.js)..."
+                // This runs npm install and npm test only in the backend folder
+                // Assumes your Jenkins agent has Node.js/npm installed
+                sh "cd backend && npm install && npm test"
+            }
+        }
+        // -----------------------------
+
         stage('SonarQube Analysis (Backend)') {
             steps {
                 echo "🔍 Running SonarQube analysis on backend..."
                 withSonarQubeEnv(env.SONARQUBE_ENV) {
                     sh """
                         cd backend && sonar-scanner \
-                          -Dsonar.projectKey=Travel-Booking-System-DevSecOps \
-                          -Dsonar.projectName='Travel Booking System DevSecOps' \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://13.235.242.71:9000 \
-                          -Dsonar.login=${SONAR_TOKEN}
+                            -Dsonar.projectKey=Travel-Booking-System-DevSecOps \
+                            -Dsonar.projectName='Travel Booking System DevSecOps' \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://13.235.242.71:9000 \
+                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+                            // ^ This new line tells SonarQube where to find your test coverage report
                     """
                 }
             }
