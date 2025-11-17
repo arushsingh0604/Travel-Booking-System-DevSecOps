@@ -40,7 +40,7 @@ pipeline {
                 echo "🧪 Running Backend unit tests (Node.js)..."
                 // This runs npm install and npm test only in the backend folder
                 // Assumes your Jenkins agent has Node.js/npm installed
-                sh "cd backend && npm install && npm test"
+                sh "cd backend && npm ci && npm test"
             }
         }
         // -----------------------------
