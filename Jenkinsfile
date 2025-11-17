@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_ENV = 'SonarQube'
         SONAR_TOKEN = credentials('SONAR_TOKEN')
-        SONAR_HOST_URL = '35.154.83.27:9000'
+        SONAR_HOST_URL = '65.0.205.79:9000'
         PATH = "/opt/sonar-scanner/bin:$PATH"
         AWS_DEFAULT_REGION = 'ap-south-1'
         AWS_CREDENTIALS = credentials('AWS_CREDS')
@@ -54,7 +54,7 @@ pipeline {
                             -Dsonar.projectKey=Travel-Booking-System-DevSecOps \
                             -Dsonar.projectName='Travel Booking System DevSecOps' \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://35.154.83.27:9000 \
+                            -Dsonar.host.url=http://65.0.205.79:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
                              # ^ This new line tells SonarQube where to find your test coverage report
