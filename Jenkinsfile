@@ -151,7 +151,6 @@ pipeline {
                         export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
                         
                         # Apply substitution to all YAML files in the k8s directory
-                        # Note: The $file variable here is safe because it's inside """..."""
                         for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
                             envsubst '$$\{DOCKER_IMAGE_TAG\} $$\{BACKEND_ECR_REPO\} $$\{FRONTEND_ECR_REPO\}' < \$$file > processed_k8s/$(basename \$$file)
                         done
