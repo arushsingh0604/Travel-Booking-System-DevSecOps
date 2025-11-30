@@ -142,7 +142,7 @@ pipeline {
                       export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
                       
                       for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
-                          envsubst < \$$file > processed_k8s/$(basename \$$file)
+                          envsubst < \$file > processed_k8s/$(basename \$file)
                       done
                   """
                   
