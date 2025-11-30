@@ -144,15 +144,15 @@ pipeline {
                     sh 'mkdir -p processed_k8s'
                     
                     // 2. Substitute Jenkins environment variables into the K8s manifests
-                    // We must export variables so 'envsubst' can see them
+                    // FIX: Use """ triple double quotes """ instead of single quotes
                     sh """
                         export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
                         export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
                         export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
                         
                         # Apply substitution to all YAML files in the k8s directory
+                        # Note: The $file variable here is safe because it's inside """..."""
                         for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
-                            # Use envsubst to replace image tags and repository URLs
                             envsubst '$$\{DOCKER_IMAGE_TAG\} $$\{BACKEND_ECR_REPO\} $$\{FRONTEND_ECR_REPO\}' < \$$file > processed_k8s/$(basename \$$file)
                         done
                     """
@@ -160,7 +160,6 @@ pipeline {
                     // 3. Apply manifests using kubectl with the secured Kubeconfig file
                     withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
                         echo "Applying updated deployments and services..."
-                        // We use the file path provided by the credentials binding
                         sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/"
                     }
                     
