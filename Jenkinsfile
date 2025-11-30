@@ -10,7 +10,8 @@ pipeline {
         AWS_CREDENTIALS = credentials('AWS_CREDS')
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDS')
         
-        // Repository names
+        // --- NEW ---
+        // Your specific repository names
         ECR_REGISTRY_URL = '881490098879.dkr.ecr.ap-south-1.amazonaws.com'
         
         BACKEND_ECR_REPO = "${ECR_REGISTRY_URL}/devops/travel-booking-system-backend"
@@ -21,6 +22,7 @@ pipeline {
     }
 
     parameters {
+        // This tag will be applied to all images
         string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'v1.0', description: 'Docker image tag')
     }
 
@@ -32,12 +34,16 @@ pipeline {
             }
         }
 
+        // --- NEW STAGE ADDED HERE ---
         stage('Unit Tests (Backend)') {
             steps {
                 echo "🧪 Running Backend unit tests (Node.js)..."
+                // This runs npm install and npm test only in the backend folder
+                // Assumes your Jenkins agent has Node.js/npm installed
                 sh "cd backend && npm ci && npm test"
             }
         }
+        // -----------------------------
 
         stage('SonarQube Analysis (Backend)') {
             steps {
@@ -51,6 +57,7 @@ pipeline {
                             -Dsonar.host.url=http://52.66.130.16:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+                             # ^ This new line tells SonarQube where to find your test coverage report
                     """
                 }
             }
@@ -67,15 +74,19 @@ pipeline {
         stage('Build & Tag Docker Images') {
             steps {
                 echo "🐳 Building Backend Docker image..."
+                // Build backend image
                 sh "docker build --no-cache -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend"
                 
                 echo "🏷 Tagging Backend image for ECR..."
+                // Tag backend image for ECR
                 sh "docker tag ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
 
                 echo "🏗️ Building Frontend Docker image..."
+                // Build frontend image
                 sh "docker build --no-cache -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
                 
                 echo "🏷 Tagging Frontend image for ECR..."
+                // Tag frontend image for ECR
                 sh "docker tag ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
             }
         }
@@ -97,16 +108,20 @@ pipeline {
         stage('Push to ECR & DockerHub') {
             steps {
                 script {
+                    
+                    // --- Login to AWS ECR ---
                     echo "🔒 Logging in to AWS ECR..."
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_CREDS']]) {
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}"
                     }
 
+                    // --- Login to DockerHub ---
                     echo "🔒 Logging in to DockerHub..."
                     withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                     }
-
+                    
+                    // --- Push Images ---
                     echo "🚀 Pushing Backend image to ECR..."
                     sh "docker push ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
                     
@@ -128,42 +143,12 @@ pipeline {
                 sh "docker-compose config || true"
             }
         }
-
-        // ================== NEW KUBERNETES DEPLOYMENT STAGE ==================
-        stage('Kubernetes Deploy') {
-            steps {
-                echo "🚀 Deploying to Kubernetes cluster..."
-
-                withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KUBECONFIG')]) {
-                    sh """
-                        export KUBECONFIG=$KUBECONFIG
-
-                        echo '📌 Updating Backend image...'
-                        kubectl set image deployment/backend-deployment backend=${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
-
-                        echo '📌 Updating Frontend image...'
-                        kubectl set image deployment/frontend-deployment frontend=${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
-
-                        echo '📄 Applying Kubernetes Manifests...'
-                        kubectl apply -f k8s/backend-deployment.yaml
-                        kubectl apply -f k8s/backend-service.yaml
-                        kubectl apply -f k8s/frontend-deployment.yaml
-                        kubectl apply -f k8s/frontend-service.yaml
-
-                        echo '🔍 Checking rollout status...'
-                        kubectl rollout status deployment/backend-deployment --namespace default
-                        kubectl rollout status deployment/frontend-deployment --namespace default
-                    """
-                }
-            }
-        }
-        // =====================================================================
-
     }
 
     post {
         always {
             echo '📦 Pipeline completed.'
+            // Log out of DockerHub
             sh "docker logout"
         }
         success {
