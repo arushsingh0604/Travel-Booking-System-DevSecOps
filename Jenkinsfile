@@ -136,36 +136,37 @@ pipeline {
         // ********* NEW KUBERNETES DEPLOYMENT STAGE *******
         // **********************************************
         stage('Kubernetes Deployment') {
-            steps {
-                script {
-                    echo "🚢 Preparing and deploying manifests to Kubernetes..."
-                    
-                    // 1. Create a directory for processed YAMLs
-                    sh 'mkdir -p processed_k8s'
-                    
-                    // 2. Substitute Jenkins environment variables into the K8s manifests
-                    // FIX: Use """ triple double quotes """ instead of single quotes
-                    sh """
-                        export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
-                        export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
-                        export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
-                        
-                        # Apply substitution to all YAML files in the k8s directory
-                        for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
-                            envsubst '$$\{DOCKER_IMAGE_TAG\} $$\{BACKEND_ECR_REPO\} $$\{FRONTEND_ECR_REPO\}' < \$$file > processed_k8s/$(basename \$$file)
-                        done
-                    """
-                    
-                    // 3. Apply manifests using kubectl with the secured Kubeconfig file
-                    withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
-                        echo "Applying updated deployments and services..."
-                        sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/"
-                    }
-                    
-                    echo "Deployment applied. Check the cluster for status."
-                }
-            }
-        }
+            steps {
+                script {
+                    echo "🚢 Preparing and deploying manifests to Kubernetes..."
+                    
+                    // 1. Create a directory for processed YAMLs
+                    sh 'mkdir -p processed_k8s'
+                    
+                    // 2. Substitute Jenkins environment variables into the K8s manifests
+                    sh """
+                        # Export the necessary variables so envsubst can see them
+                        export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
+                        export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
+                        export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
+                        
+                        # Apply substitution to all YAML files in the k8s directory
+                        for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
+                            # Simplified envsubst command: removes the complex, error-prone variable list
+                            envsubst < \$$file > processed_k8s/$(basename \$$file)
+                        done
+                    """
+                    
+                    // 3. Apply manifests using kubectl with the secured Kubeconfig file
+                    withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
+                        echo "Applying updated deployments and services..."
+                        sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/"
+                    }
+                    
+                    echo "Deployment applied. Check the cluster for status."
+                }
+            }
+        }
         // **********************************************
 
         stage('Compose Validation (Optional)') {
