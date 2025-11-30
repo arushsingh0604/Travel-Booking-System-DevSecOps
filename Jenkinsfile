@@ -10,11 +10,7 @@ pipeline {
         AWS_CREDENTIALS = credentials('AWS_CREDS')
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDS')
         
-        // --- NEW ENVIRONMENT VARIABLES ADDED HERE ---
-        KUBE_CONFIG_CRED = credentials('KUBE_CONFIG_FILE') 
-        K8S_MANIFEST_DIR = 'k8s'
-        // -------------------------------------------
-        
+        // Repository names
         ECR_REGISTRY_URL = '881490098879.dkr.ecr.ap-south-1.amazonaws.com'
         
         BACKEND_ECR_REPO = "${ECR_REGISTRY_URL}/devops/travel-booking-system-backend"
@@ -110,7 +106,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                     }
-                    
+
                     echo "🚀 Pushing Backend image to ECR..."
                     sh "docker push ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
                     
@@ -126,43 +122,43 @@ pipeline {
             }
         }
 
-        // **********************************************
-        // ********* NEW KUBERNETES DEPLOYMENT STAGE ****
-        // **********************************************
-        stage('Kubernetes Deployment') {
-            steps {
-               script {
-                  echo "🚢 Preparing and deploying manifests to Kubernetes..."
-                  
-                  sh 'mkdir -p processed_k8s'
-                  
-                  sh """
-                      export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
-                      export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
-                      export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
-                      
-                      for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
-                          envsubst < \$file > processed_k8s/$(basename \$file)
-                      done
-                  """
-                  
-                  withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
-                      echo "Applying updated deployments and services..."
-                      sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/"
-                  }
-                  
-                  echo "Deployment applied. Check the cluster for status."
-               }
-           }
-        }
-        // **********************************************
-
         stage('Compose Validation (Optional)') {
             steps {
                 echo "🧩 Validating docker-compose.yml..."
                 sh "docker-compose config || true"
             }
         }
+
+        // ================== NEW KUBERNETES DEPLOYMENT STAGE ==================
+        stage('Kubernetes Deploy') {
+            steps {
+                echo "🚀 Deploying to Kubernetes cluster..."
+
+                withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KUBECONFIG')]) {
+                    sh """
+                        export KUBECONFIG=$KUBECONFIG
+
+                        echo '📌 Updating Backend image...'
+                        kubectl set image deployment/backend-deployment backend=${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
+
+                        echo '📌 Updating Frontend image...'
+                        kubectl set image deployment/frontend-deployment frontend=${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
+
+                        echo '📄 Applying Kubernetes Manifests...'
+                        kubectl apply -f k8s/backend-deployment.yaml
+                        kubectl apply -f k8s/backend-service.yaml
+                        kubectl apply -f k8s/frontend-deployment.yaml
+                        kubectl apply -f k8s/frontend-service.yaml
+
+                        echo '🔍 Checking rollout status...'
+                        kubectl rollout status deployment/backend-deployment --namespace default
+                        kubectl rollout status deployment/frontend-deployment --namespace default
+                    """
+                }
+            }
+        }
+        // =====================================================================
+
     }
 
     post {
@@ -186,7 +182,6 @@ pipeline {
                         <li><b>Frontend (ECR):</b> ${FRONTEND_ECR_REPO}</li>
                         <li><b>Frontend (DockerHub):</b> ${FRONTEND_DOCKERHUB_REPO}</li>
                     </ul>
-                    <p><b>Kubernetes Deployment:</b> Applied successfully to cluster.</p>
                     <p>Regards,<br>Jenkins CI</p>
                 """,
                 mimeType: 'text/html'
