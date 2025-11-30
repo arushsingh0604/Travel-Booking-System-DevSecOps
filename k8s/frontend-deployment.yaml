@@ -1,0 +1,32 @@
+# k8s/frontend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tbs-frontend-deployment
+  labels:
+    app: travel-booking
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travel-booking
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: travel-booking
+        tier: frontend
+    spec:
+      containers:
+      - name: frontend-container
+        # Placeholder variables will be substituted by Jenkins pipeline
+        image: ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}
+        ports:
+        - containerPort: 80 # Assuming your frontend (React/Nginx) serves on port 80
+        env:
+        # Frontend needs to know the URL of the Backend NodePort service.
+        # You must replace <NODE_IP_ADDRESS> with the actual IP address of your EC2 worker node
+        # during the final validation/configuration of the frontend build process.
+        - name: REACT_APP_BACKEND_URL # Replace with the actual variable your frontend uses
+          value: "http://<NODE_IP_ADDRESS>:30001"
