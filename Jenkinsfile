@@ -10,7 +10,11 @@ pipeline {
         AWS_CREDENTIALS = credentials('AWS_CREDS')
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDS')
         
-        // --- NEW ---
+        // --- NEW ENVIRONMENT VARIABLES ADDED HERE ---
+        KUBE_CONFIG_CRED = credentials('KUBE_CONFIG_FILE') // ID for the Kubeconfig Secret Text
+        K8S_MANIFEST_DIR = 'k8s'                          // Directory where YAML manifests live
+        // -------------------------------------------
+        
         // Your specific repository names
         ECR_REGISTRY_URL = '881490098879.dkr.ecr.ap-south-1.amazonaws.com'
         
@@ -34,16 +38,12 @@ pipeline {
             }
         }
 
-        // --- NEW STAGE ADDED HERE ---
         stage('Unit Tests (Backend)') {
             steps {
                 echo "🧪 Running Backend unit tests (Node.js)..."
-                // This runs npm install and npm test only in the backend folder
-                // Assumes your Jenkins agent has Node.js/npm installed
                 sh "cd backend && npm ci && npm test"
             }
         }
-        // -----------------------------
 
         stage('SonarQube Analysis (Backend)') {
             steps {
@@ -57,7 +57,6 @@ pipeline {
                             -Dsonar.host.url=http://52.66.130.16:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                             # ^ This new line tells SonarQube where to find your test coverage report
                     """
                 }
             }
@@ -74,19 +73,15 @@ pipeline {
         stage('Build & Tag Docker Images') {
             steps {
                 echo "🐳 Building Backend Docker image..."
-                // Build backend image
                 sh "docker build --no-cache -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend"
                 
                 echo "🏷 Tagging Backend image for ECR..."
-                // Tag backend image for ECR
                 sh "docker tag ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
 
                 echo "🏗️ Building Frontend Docker image..."
-                // Build frontend image
                 sh "docker build --no-cache -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
                 
                 echo "🏷 Tagging Frontend image for ECR..."
-                // Tag frontend image for ECR
                 sh "docker tag ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
             }
         }
@@ -136,6 +131,44 @@ pipeline {
                 }
             }
         }
+        
+        // **********************************************
+        // ********* NEW KUBERNETES DEPLOYMENT STAGE *******
+        // **********************************************
+        stage('Kubernetes Deployment') {
+            steps {
+                script {
+                    echo "🚢 Preparing and deploying manifests to Kubernetes..."
+                    
+                    // 1. Create a directory for processed YAMLs
+                    sh 'mkdir -p processed_k8s'
+                    
+                    // 2. Substitute Jenkins environment variables into the K8s manifests
+                    // We must export variables so 'envsubst' can see them
+                    sh """
+                        export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
+                        export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
+                        export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
+                        
+                        # Apply substitution to all YAML files in the k8s directory
+                        for file in ${env.K8S_MANIFEST_DIR}/*.yaml; do
+                            # Use envsubst to replace image tags and repository URLs
+                            envsubst '$$\{DOCKER_IMAGE_TAG\} $$\{BACKEND_ECR_REPO\} $$\{FRONTEND_ECR_REPO\}' < \$$file > processed_k8s/$(basename \$$file)
+                        done
+                    """
+                    
+                    // 3. Apply manifests using kubectl with the secured Kubeconfig file
+                    withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
+                        echo "Applying updated deployments and services..."
+                        // We use the file path provided by the credentials binding
+                        sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/"
+                    }
+                    
+                    echo "Deployment applied. Check the cluster for status."
+                }
+            }
+        }
+        // **********************************************
 
         stage('Compose Validation (Optional)') {
             steps {
@@ -167,6 +200,7 @@ pipeline {
                         <li><b>Frontend (ECR):</b> ${FRONTEND_ECR_REPO}</li>
                         <li><b>Frontend (DockerHub):</b> ${FRONTEND_DOCKERHUB_REPO}</li>
                     </ul>
+                    <p><b>Kubernetes Deployment:</b> Applied successfully to cluster.</p>
                     <p>Regards,<br>Jenkins CI</p>
                 """,
                 mimeType: 'text/html'
