@@ -132,28 +132,38 @@ pipeline {
         // ================== NEW KUBERNETES DEPLOYMENT STAGE ==================
         stage('Kubernetes Deploy') {
             steps {
-                echo "🚀 Deploying to Kubernetes cluster..."
+                script {
+                    echo "🚢 Preparing and deploying manifests to Kubernetes (Declarative Method)..."
 
-                withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KUBECONFIG')]) {
+                    // 1. Create a directory for processed YAMLs and substitute variables
+                    //    NOTE: THIS LOGIC IS NECESSARY TO INJECT ECR REPO AND TAG
+                    sh 'mkdir -p processed_k8s'
                     sh """
-                        export KUBECONFIG=$KUBECONFIG
-
-                        echo '📌 Updating Backend image...'
-                        kubectl set image deployment/backend-deployment backend=${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
-
-                        echo '📌 Updating Frontend image...'
-                        kubectl set image deployment/frontend-deployment frontend=${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG} --namespace default
-
-                        echo '📄 Applying Kubernetes Manifests...'
-                        kubectl apply -f k8s/backend-deployment.yaml
-                        kubectl apply -f k8s/backend-service.yaml
-                        kubectl apply -f k8s/frontend-deployment.yaml
-                        kubectl apply -f k8s/frontend-service.yaml
-
-                        echo '🔍 Checking rollout status...'
-                        kubectl rollout status deployment/backend-deployment --namespace default
-                        kubectl rollout status deployment/frontend-deployment --namespace default
+                        # Export the necessary variables so envsubst can see them
+                        export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
+                        export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
+                        export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
+                        
+                        # Use envsubst to replace placeholders in all YAMLs
+                        for file in k8s/*.yaml; do
+                            envsubst < \$$file > processed_k8s/$(basename \$$file)
+                        done
                     """
+
+                    // 2. Apply manifests using kubectl with the secured Kubeconfig file
+                    withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
+                        sh """
+                            # We no longer need 'export KUBECONFIG' or 'kubectl set image'
+                            
+                            echo '📄 Applying Kubernetes Manifests...'
+                            # This one command applies all Deployments AND Services
+                            kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/
+
+                            echo '🔍 Checking rollout status...'
+                            kubectl --kubeconfig=${KUBECONFIG_PATH} rollout status deployment/tbs-backend-deployment --namespace default
+                            kubectl --kubeconfig=${KUBECONFIG_PATH} rollout status deployment/tbs-frontend-deployment --namespace default
+                        """
+                    }
                 }
             }
         }
