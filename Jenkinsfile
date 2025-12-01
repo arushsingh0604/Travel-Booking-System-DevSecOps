@@ -138,15 +138,18 @@ pipeline {
                     // 1. Create a directory for processed YAMLs and substitute variables
                     //    NOTE: THIS LOGIC IS NECESSARY TO INJECT ECR REPO AND TAG
                     sh 'mkdir -p processed_k8s'
+                    
                     sh """
                         # Export the necessary variables so envsubst can see them
                         export DOCKER_IMAGE_TAG="${params.DOCKER_IMAGE_TAG}"
                         export BACKEND_ECR_REPO="${env.BACKEND_ECR_REPO}"
                         export FRONTEND_ECR_REPO="${env.FRONTEND_ECR_REPO}"
+
+                        mkdir -p processed_k8s
                         
                         # Use envsubst to replace placeholders in all YAMLs
                         for file in k8s/*.yaml; do
-                            envsubst < \$$file > processed_k8s/$(basename \$$file)
+                            envsubst < \$file > processed_k8s/$(basename \$file)
                         done
                     """
 
