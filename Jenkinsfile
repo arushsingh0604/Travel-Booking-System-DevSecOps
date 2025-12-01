@@ -149,7 +149,7 @@ pipeline {
                         
                         # Use envsubst to replace placeholders in all YAMLs
                         for file in k8s/*.yaml; do
-                            envsubst < \$file > processed_k8s/$(basename \$file)
+                            envsubst < \$file > processed_k8s/\$(basename \$file)
                         done
                     """
 
