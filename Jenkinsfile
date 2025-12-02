@@ -154,17 +154,17 @@ pipeline {
                     """
 
                     // 2. Apply manifests using kubectl with the secured Kubeconfig file
-                    withCredentials([file(credentialsId: 'KUBE_CONFIG_FILE', variable: 'KUBECONFIG_PATH')]) {
+                    withKubeConfig([credentialsId:'KUBE_CONFIG_FILE']) {
                         sh """
                             # We no longer need 'export KUBECONFIG' or 'kubectl set image'
                             
                             echo '📄 Applying Kubernetes Manifests...'
                             # This one command applies all Deployments AND Services
-                            kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f processed_k8s/
+                            kubectl apply -f processed_k8s/
 
                             echo '🔍 Checking rollout status...'
-                            kubectl --kubeconfig=${KUBECONFIG_PATH} rollout status deployment/tbs-backend-deployment --namespace default
-                            kubectl --kubeconfig=${KUBECONFIG_PATH} rollout status deployment/tbs-frontend-deployment --namespace default
+                            kubectl rollout status deployment/tbs-backend-deployment --namespace default
+                           kubectl rollout status deployment/tbs-frontend-deployment --namespace default
                         """
                     }
                 }
