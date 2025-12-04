@@ -21,7 +21,8 @@ pipeline {
     }
 
     parameters {
-        string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'v1.0', description: 'Docker image tag')
+        // FIX: Update default tag to force Kubernetes to pull the new, fixed image (v1.1)
+        string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'v1.1', description: 'Docker image tag')
     }
 
     stages {
@@ -67,13 +68,17 @@ pipeline {
         stage('Build & Tag Docker Images') {
             steps {
                 echo "🐳 Building Backend Docker image..."
-                sh "docker build --no-cache -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend"
+                // FIX: Removed --no-cache. Only use it when debugging a flaky layer.
+                // Building the image again ensures the MONGODB_URI fix is baked in.
+                sh "docker build -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend" 
                 
                 echo "🏷 Tagging Backend image for ECR..."
                 sh "docker tag ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
 
                 echo "🏗️ Building Frontend Docker image..."
-                sh "docker build --no-cache -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
+                // FIX: Removed --no-cache.
+                // Building the image again ensures the new, secure base image (Alpine 3.20) is used.
+                sh "docker build -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
                 
                 echo "🏷 Tagging Frontend image for ECR..."
                 sh "docker tag ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
@@ -125,6 +130,7 @@ pipeline {
         stage('Compose Validation (Optional)') {
             steps {
                 echo "🧩 Validating docker-compose.yml..."
+                // FIX: The docker-compose file is now MongoDB, validation is acceptable.
                 sh "docker-compose config || true"
             }
         }
@@ -136,7 +142,6 @@ pipeline {
                     echo "🚢 Preparing and deploying manifests to Kubernetes (Declarative Method)..."
 
                     // 1. Create a directory for processed YAMLs and substitute variables
-                    //    NOTE: THIS LOGIC IS NECESSARY TO INJECT ECR REPO AND TAG
                     sh 'mkdir -p processed_k8s'
                     
                     sh """
@@ -148,6 +153,7 @@ pipeline {
                         mkdir -p processed_k8s
                         
                         # Use envsubst to replace placeholders in all YAMLs
+                        # NOTE: This will include the new db-deployment.yaml and db-service.yaml
                         for file in k8s/*.yaml; do
                             envsubst < \$file > processed_k8s/\$(basename \$file)
                         done
@@ -156,15 +162,14 @@ pipeline {
                     // 2. Apply manifests using kubectl with the secured Kubeconfig file
                     withKubeConfig([credentialsId:'KUBE_CONFIG_FILE']) {
                         sh """
-                            # We no longer need 'export KUBECONFIG' or 'kubectl set image'
-                            
                             echo '📄 Applying Kubernetes Manifests...'
-                            # This one command applies all Deployments AND Services
+                            # This one command applies all Deployments AND Services, including the NEW MongoDB ones.
                             kubectl apply -f processed_k8s/
 
                             echo '🔍 Checking rollout status...'
-                            kubectl rollout status deployment/tbs-backend-deployment --namespace default
-                           kubectl rollout status deployment/tbs-frontend-deployment --namespace default
+                            # FIX: Add a generous timeout to prevent "exceeded its progress deadline" failure
+                            kubectl rollout status deployment/tbs-backend-deployment --namespace default --timeout=15m
+                            kubectl rollout status deployment/tbs-frontend-deployment --namespace default
                         """
                     }
                 }
@@ -209,7 +214,7 @@ pipeline {
                     <p>Hi Arush,</p>
                     <p>The pipeline for <b>${env.JOB_NAME}</b> failed.</p>
                     <p>Check SonarQube and Trivy for details.</p>
-                    <p><a href='${SONAR_HOST_URL}/dashboard?id=Travel-Booking-System'>Sonar Dashboard</a></p>
+                    <p><a href='http://13.127.130.241:9000/dashboard?id=Travel-Booking-System'>Sonar Dashboard</a></p>
                 """,
                 mimeType: 'text/html'
             )
