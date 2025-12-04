@@ -1,4 +1,4 @@
-# k8s/frontend-deployment.yaml
+# k8s/frontend-deployment.yaml - CORRECTED VERSION
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +18,12 @@ spec:
         app: travel-booking
         tier: frontend
     spec:
+      # --- FIX 1: ECR Authentication ---
+      # Add the secret that holds ECR login credentials.
+      # This secret 'ecr-pull-secret' must be created on your cluster.
+      imagePullSecrets:
+      - name: ecr-pull-secret
+      
       containers:
       - name: frontend-container
         # Placeholder variables will be substituted by Jenkins pipeline
@@ -25,8 +31,14 @@ spec:
         ports:
         - containerPort: 80 # Assuming your frontend (React/Nginx) serves on port 80
         env:
-        # Frontend needs to know the URL of the Backend NodePort service.
-        # You must replace <NODE_IP_ADDRESS> with the actual IP address of your EC2 worker node
-        # during the final validation/configuration of the frontend build process.
-        - name: REACT_APP_BACKEND_URL # Replace with the actual variable your frontend uses
-          value: "http://<NODE_IP_ADDRESS>:30001"
+        # --- FIX 2: Backend URL Reference ---
+        # The frontend should connect to the NodePort service using its internal cluster name.
+        # Assuming your backend service is named 'tbs-backend-np-service' and exposes port 3000.
+        # This assumes your production frontend *is built* to point to this URL.
+        - name: REACT_APP_BACKEND_URL
+          # This should be the internal cluster DNS name and port for the backend Service.
+          # The format is: http://<service-name>:<targetPort>
+          value: "http://tbs-backend-np-service:3000"
+        # If the frontend uses NodePort to talk to the backend, it implies the frontend 
+        # is running in an environment where it can access NodePort ports, but it is 
+        # *much* cleaner to use the internal ClusterIP service name for service-to-service communication.
