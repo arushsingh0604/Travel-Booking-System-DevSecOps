@@ -1,0 +1,35 @@
+# k8s/db-deployment.yaml - MongoDB Deployment (Assumed)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tbs-mongo-deployment
+  labels:
+    app: travel-booking
+    tier: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travel-booking
+      tier: db
+  template:
+    metadata:
+      labels:
+        app: travel-booking
+        tier: db
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0 # Using a standard MongoDB image
+        ports:
+        - containerPort: 27017
+        # MongoDB is often run without initial auth in K8s for simplicity,
+        # but for production, you would add MONGO_INITDB_ROOT_* credentials here.
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db # Default MongoDB data path
+      
+      volumes:
+      - name: mongo-persistent-storage
+        # Replace this with a proper PersistentVolumeClaim in production
+        emptyDir: {}
