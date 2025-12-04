@@ -1,0 +1,17 @@
+# k8s/db-service.yaml - MongoDB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: tbs-mongo-service # <-- Used in MONGODB_URI
+  labels:
+    app: travel-booking
+    tier: db
+spec:
+  selector:
+    app: travel-booking
+    tier: db
+  ports:
+  - protocol: TCP
+    port: 27017      # Service exposed port
+    targetPort: 27017 # Container port
+  type: ClusterIP
