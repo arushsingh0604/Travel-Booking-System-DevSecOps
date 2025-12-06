@@ -1,21 +1,14 @@
-# k8s/backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: tbs-backend-np-service
-  labels:
-    app: travel-booking
-    tier: backend
+  name: backend-service
+  namespace: travel-app
 spec:
-  # Constraint: Use NodePort service only
-  type: NodePort 
+  type: ClusterIP
   selector:
-    app: travel-booking
-    tier: backend
+    app: backend
   ports:
-    # Port exposed within the cluster (ClusterIP)
-  - port: 3000
-    # Port the container is listening on (containerPort from deployment)
-    targetPort: 3000
-    # External port on the Node (used for external access/validation)
-    nodePort: 30001 # Choose a specific port between 30000-32767
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
