@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_ENV = 'SonarQube'
         SONAR_TOKEN = credentials('SONAR_TOKEN')
-        SONAR_HOST_URL = '13.232.147.230:9000'
+        SONAR_HOST_URL = '3.108.62.102:9000'
         PATH = "/opt/sonar-scanner/bin:$PATH"
         AWS_DEFAULT_REGION = 'ap-south-1'
         AWS_CREDENTIALS = credentials('AWS_CREDS')
@@ -50,7 +50,7 @@ pipeline {
                             -Dsonar.projectName='Travel Booking System DevSecOps' \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://13.232.147.230:9000 \
-                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.login=http://3.108.62.102:9000 \
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
                     """
                 }
