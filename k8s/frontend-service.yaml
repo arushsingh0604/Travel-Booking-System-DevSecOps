@@ -1,21 +1,14 @@
-# k8s/frontend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: tbs-frontend-np-service
-  labels:
-    app: travel-booking
-    tier: frontend
+  name: frontend-service
+  namespace: travel-app
 spec:
-  # Constraint: Use NodePort service only
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: travel-booking
-    tier: frontend
+    app: frontend
   ports:
-    # Port exposed within the cluster (ClusterIP)
-  - port: 80
-    # Port the container is listening on (containerPort from deployment)
-    targetPort: 80
-    # External port on the Node (used for external access/validation)
-    nodePort: 30002 # Choose a specific port between 30000-32767, separate from the backend
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
