@@ -10,8 +10,8 @@ COPY package*.json ./
 # Install dependencies (use npm install instead of ci for flexibility)
 RUN npm install
 
-# Copy the main server file only
-COPY server.js .
+# Copy all backend source code (including config, routes, models, controllers)
+COPY . .
 
 # Create a non-root user (still important for security)
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
