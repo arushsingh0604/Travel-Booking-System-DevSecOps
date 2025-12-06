@@ -104,7 +104,7 @@ pipeline {
                 script {
                     echo "🔒 Logging in to AWS ECR..."
                     withCredentials([
-                        [class: 'AmazonWebServicesCredentialsBinding', 
+                        [$class: 'AmazonWebServicesCredentialsBinding', 
                          credentialsId: 'AWS_CREDS', 
                          accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
