@@ -1,43 +1,24 @@
-# k8s/backend-deployment.yaml - MongoDB Ready
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tbs-backend-deployment
-  labels:
-    app: travel-booking
-    tier: backend
+  name: backend
+  namespace: travel-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: travel-booking
-      tier: backend
+      app: backend
   template:
     metadata:
       labels:
-        app: travel-booking
-        tier: backend
+        app: backend
     spec:
-      # --- ECR Authentication Fix (if needed) ---
-      # NOTE: The secret 'ecr-pull-secret' must be created on your cluster.
-      imagePullSecrets:
-      - name: ecr-pull-secret 
-      
       containers:
-      - name: backend-container
-        # Placeholder variables will be substituted by Jenkins pipeline
-        image: ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}
+      - name: backend
+        image: 881490098879.dkr.ecr.ap-south-1.amazonaws.com/devops/travel-booking-system-backend:v1.0
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
         env:
-        # Application Environment Variables
         - name: NODE_ENV
-          value: production
-        - name: PORT
-          value: "3000"
-        
-        # --- MongoDB Connection URI ---
-        # NOTE: This points to the MongoDB Service defined in k8s/db-service.yaml
-        - name: MONGODB_URI
-          # The name 'tbs-mongo-service' must match your DB Service name.
-          value: "mongodb://tbs-mongo-service:27017/travelEas"
+          value: "production"
