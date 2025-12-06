@@ -1,44 +1,24 @@
-# k8s/frontend-deployment.yaml - CORRECTED VERSION
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tbs-frontend-deployment
-  labels:
-    app: travel-booking
-    tier: frontend
+  name: frontend
+  namespace: travel-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: travel-booking
-      tier: frontend
+      app: frontend
   template:
     metadata:
       labels:
-        app: travel-booking
-        tier: frontend
+        app: frontend
     spec:
-      # --- FIX 1: ECR Authentication ---
-      # Add the secret that holds ECR login credentials.
-      # This secret 'ecr-pull-secret' must be created on your cluster.
-      imagePullSecrets:
-      - name: ecr-pull-secret
-      
       containers:
-      - name: frontend-container
-        # Placeholder variables will be substituted by Jenkins pipeline
-        image: ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}
-        ports:
-        - containerPort: 80 # Assuming your frontend (React/Nginx) serves on port 80
+      - name: frontend
+        image: 881490098879.dkr.ecr.ap-south-1.amazonaws.com/devops/travel-booking-system-frontend:v1.0
+        imagePullPolicy: IfNotPresent
         env:
-        # --- FIX 2: Backend URL Reference ---
-        # The frontend should connect to the NodePort service using its internal cluster name.
-        # Assuming your backend service is named 'tbs-backend-np-service' and exposes port 3000.
-        # This assumes your production frontend *is built* to point to this URL.
         - name: REACT_APP_BACKEND_URL
-          # This should be the internal cluster DNS name and port for the backend Service.
-          # The format is: http://<service-name>:<targetPort>
-          value: "http://tbs-backend-np-service:3000"
-        # If the frontend uses NodePort to talk to the backend, it implies the frontend 
-        # is running in an environment where it can access NodePort ports, but it is 
-        # *much* cleaner to use the internal ClusterIP service name for service-to-service communication.
+          value: "http://backend-service:8080"
+        ports:
+        - containerPort: 80
