@@ -118,8 +118,9 @@ Travel-Booking-System-DevSecOps/
 5.Ingress for external access
 
 6.Deployment can be executed via:
-     ```bash
-          kubectl apply -f k8s/
+  ```bash
+  kubectl apply -f k8s/
+
 
 ## 🔍 Security Practices Implemented
 
