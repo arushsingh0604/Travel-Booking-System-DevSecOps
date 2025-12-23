@@ -107,33 +107,33 @@ Travel-Booking-System-DevSecOps/
    
 ## ☸ Kubernetes Deployment
 
-The project includes Kubernetes manifests for:
+1.The project includes Kubernetes manifests for:
 
-Namespace isolation
+2.Namespace isolation
 
-Frontend & backend deployments
+3.Frontend & backend deployments
 
-ClusterIP services for internal communication
+4.ClusterIP services for internal communication
 
-Ingress for external access
+5.Ingress for external access
 
-Deployment can be executed via:
-
-kubectl apply -f k8s/
+6.Deployment can be executed via:
+     ```bash
+          kubectl apply -f k8s/
 
 ## 🔍 Security Practices Implemented
 
-Static Application Security Testing (SAST)
+1.Static Application Security Testing (SAST)
 
-Dependency vulnerability scanning
+2.Dependency vulnerability scanning
 
-Container image security scanning
+3.Container image security scanning
 
-Pipeline security gates
+4.Pipeline security gates
 
-Secure credential handling in Jenkins
+5.Secure credential handling in Jenkins
 
-Shift-Left security enforcement
+6.Shift-Left security enforcement
 
 ## 📈 Why This Project Matters
 
@@ -141,13 +141,13 @@ This project reflects real enterprise DevSecOps workflows, not toy examples.
 
 It demonstrates:
 
-Secure software delivery
+1.Secure software delivery
 
-Automation at scale
+2.Automation at scale
 
-Production-ready CI/CD pipelines
+3.Production-ready CI/CD pipelines
 
-Security-driven engineering mindset
+4.Security-driven engineering mindset
 
 Perfect for DevOps / DevSecOps / Cloud Engineer roles.
 
@@ -158,10 +158,6 @@ Dynamic Application Security Testing (DAST)
 Cloud deployment (AWS EKS / Azure AKS)
 
 Monitoring with Prometheus & Grafana
-
-Policy-as-Code enforcement
-
-Blue-Green & Canary deployments
 
 ## 🧑‍💻 Author
 
