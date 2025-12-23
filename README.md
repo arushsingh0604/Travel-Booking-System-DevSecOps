@@ -1,104 +1,172 @@
-# TravelEase - Travel Booking Platformm
+# 🚀 TravelEase – Secure Travel Booking Platform (DevSecOps CI/CD)
 
-## Project Structure
+TravelEase is a **full-stack travel booking application** designed and delivered using **modern DevSecOps principles**.  
+This project demonstrates **end-to-end CI/CD automation**, **containerization**, **security-first pipelines**, and **cloud-ready deployment**, making it ideal for showcasing real-world DevSecOps skills to recruiters.
 
-```
-TravelEase/
-├── index.html                 # Landing page (main entry point) hggjh
-├── server.js                  # Backend server
-├── package-lock.json          # NPM dependencies lock file
-├── README.md                  # Project documentation
-│
-├── assets/                    # Static assets
-│   └── images/               # Image files
-│       ├── hero.avif
-│       ├── flight-splash.webp
-│       ├── hotel-splash.avif
-│       ├── img1.png
-│       ├── img2.webp
-│       ├── img3.webp
-│       ├── img4.jpg
-│       └── Yash.jpg
-│
-├── src/                      # Source code hii
-│   ├── css/                  # Stylesheets
-│   │   ├── base.css         # Base styles
-│   │   ├── landing.css      # Landing page styles
-│   │   ├── auth.css         # Authentication pages styles
-│   │   ├── dashboard.css    # Dashboard styles
-│   │   ├── flights.css      # Flights page styles
-│   │   ├── hotels.css       # Hotels page styles
-│   │   ├── packages.css     # Packages page styles
-│   │   ├── offers.css       # Offers page styles
-│   │   ├── profile.css      # Profile page styles
-│   │   └── wallet.css       # Wallet page styles
-│   │
-│   └── js/                   # JavaScript files
-│       ├── auth.js          # Authentication logic
-│       ├── dashboard.js     # Dashboard functionality
-│       ├── flights.js       # Flights search and booking
-│       ├── hotels.js        # Hotels search and booking
-│       ├── packages.js      # Packages functionality
-│       ├── offers.js        # Offers functionality
-│       ├── profile.js       # Profile management
-│       ├── wallet.js        # Wallet functionality
-│       └── sidebar.js       # Sidebar navigation
-│
-├── auth-pages/               # Authentication pages
-│   ├── login.html           # User login page
-│   └── register.html        # User registration page
-│
-├── dashboard-pages/          # Dashboard and user pages
-│   ├── dashboard.html       # Main dashboard (after login)
-│   ├── flights.html         # Flight search and booking
-│   ├── hotels.html          # Hotel search and booking
-│   ├── packages.html        # Travel packages
-│   ├── offers.html          # Special offers
-│   ├── profile.html         # User profile management
-│   └── wallet.html          # User wallet/payments
-│
-└── public/                   # Public assets (future use)
-```
+---
 
-## Page Flow
+## 📌 Project Objective
 
-1. **Landing Page** (`index.html`)
-   - Main entry point for visitors
-   - Contains navigation to login/register pages
-   - Located in root directory
+To build and deploy a **secure, scalable travel booking platform** with:
+- Automated CI/CD pipelines
+- Embedded security checks (Shift-Left Security)
+- Containerized application delivery
+- Infrastructure-ready deployment using Kubernetes
 
-2. **Authentication** (`auth-pages/`)
-   - `login.html` - User login
-   - `register.html` - New user registration
-   - Both redirect to dashboard after successful authentication
+---
 
-3. **Dashboard** (`dashboard-pages/`)
-   - `dashboard.html` - Main dashboard after login (formerly index.html in dashboard folder)
-   - All other pages for logged-in users
-   - Consistent navigation sidebar across all pages
+## 🧠 Key Highlights (Recruiter Focus)
 
-## Key Changes Made
+- ✅ End-to-end **DevSecOps pipeline** using Jenkins
+- ✅ **Dockerized frontend & backend**
+- ✅ **Security integrated into CI/CD** (SAST, dependency & container scanning)
+- ✅ **Infrastructure-as-Code ready**
+- ✅ **Kubernetes deployment manifests**
+- ✅ Real-world **enterprise-grade pipeline design**
 
-1. **Fixed Asset Path**: Changed `assests/` to `assets/` (corrected spelling)
-2. **Organized Structure**: 
-   - CSS files moved to `src/css/`
-   - JavaScript files moved to `src/js/`
-   - Images moved to `assets/images/`
-3. **Renamed Main Dashboard**: `dashboard/index.html` → `dashboard-pages/dashboard.html`
-4. **Updated All References**: All file paths updated to reflect new structure
-5. **Consistent Navigation**: All dashboard navigation now points to `dashboard.html` instead of `index.html`
+---
 
-## Running the Application
+## 🛠 Application Features
 
-1. Start the server: `node server.js`
-2. Open browser and navigate to the landing page
-3. Use the navigation to login/register
-4. Access dashboard features after authentication
+- User registration & authentication
+- Flight, hotel, and travel package booking
+- User profile & wallet management
+- Responsive frontend interface
+- Modular backend APIs
+- Scalable microservice-ready structure
 
-## File Naming Convention
+---
 
-- **Landing page**: `index.html` (root)
-- **Dashboard main**: `dashboard.html` 
-- **Feature pages**: Descriptive names (flights.html, hotels.html, etc.)
-- **Folders**: Kebab-case with descriptive names
-- **Assets**: Organized by type in dedicated folders
+## 🔐 DevSecOps Pipeline Overview
+
+The CI/CD pipeline is designed with **security at every stage**:
+
+### Pipeline Stages
+1. **Code Checkout**
+2. **Build & Dependency Installation**
+3. **Static Code Analysis (SAST)**
+4. **Dependency Vulnerability Scanning**
+5. **Docker Image Build**
+6. **Container Image Security Scan**
+7. **Kubernetes Manifest Validation**
+8. **Automated Deployment**
+
+🔁 Any security failure **blocks the pipeline**, enforcing strict quality gates.
+
+---
+
+## 📁 Project Structure
+Travel-Booking-System-DevSecOps/
+├── backend/ # Backend services & APIs
+├── frontend/ # Frontend application
+├── k8s/ # Kubernetes manifests
+│ ├── namespace.yaml
+│ ├── deployment.yaml
+│ ├── service.yaml
+│ └── ingress.yaml
+├── docker-compose.yaml # Local container orchestration
+├── Jenkinsfile # CI/CD pipeline definition
+├── .env.example # Environment variables template
+└── README.md # Project documentation
+
+---
+
+## 🧰 Technology Stack
+
+| Category | Tools & Technologies |
+|--------|---------------------|
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Node.js, Express |
+| CI/CD | Jenkins |
+| Containers | Docker |
+| Orchestration | Kubernetes |
+| Security | SAST, Dependency Scanning, Image Scanning |
+| DevSecOps | Shift-Left Security, Automated Gates |
+
+---
+
+## ⚙️ How to Run Locally
+
+### Prerequisites
+- Docker
+- Docker Compose
+- Node.js
+- Jenkins (optional for pipeline execution)
+
+---
+
+### 🔧 Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/arushsingh0604/Travel-Booking-System-DevSecOps.git
+   cd Travel-Booking-System-DevSecOps
+   cp .env.example .env
+   docker-compose up --build
+   http://localhost:3000
+☸ Kubernetes Deployment
+
+The project includes Kubernetes manifests for:
+
+Namespace isolation
+
+Frontend & backend deployments
+
+ClusterIP services for internal communication
+
+Ingress for external access
+
+Deployment can be executed via:
+
+kubectl apply -f k8s/
+
+🔍 Security Practices Implemented
+
+Static Application Security Testing (SAST)
+
+Dependency vulnerability scanning
+
+Container image security scanning
+
+Pipeline security gates
+
+Secure credential handling in Jenkins
+
+Shift-Left security enforcement
+
+📈 Why This Project Matters
+
+This project reflects real enterprise DevSecOps workflows, not toy examples.
+
+It demonstrates:
+
+Secure software delivery
+
+Automation at scale
+
+Production-ready CI/CD pipelines
+
+Security-driven engineering mindset
+
+Perfect for DevOps / DevSecOps / Cloud Engineer roles.
+
+🚧 Future Enhancements
+
+Dynamic Application Security Testing (DAST)
+
+Cloud deployment (AWS EKS / Azure AKS)
+
+Monitoring with Prometheus & Grafana
+
+Policy-as-Code enforcement
+
+Blue-Green & Canary deployments
+
+🧑‍💻 Author
+
+Arush Singh
+DevSecOps | Cloud | CI/CD | Kubernetes
+
+🔗 GitHub: https://github.com/arushsingh0604
+
+
