@@ -68,7 +68,7 @@ Travel-Booking-System-DevSecOps/
 ├── docker-compose.yaml # Local container orchestration
 ├── Jenkinsfile # CI/CD pipeline definition
 ├── .env.example # Environment variables template
-└── README.md # Project documentation
+└── README.md # Project documentation ```
 
 ---
 
