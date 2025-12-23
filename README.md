@@ -56,6 +56,7 @@ The CI/CD pipeline is designed with **security at every stage**:
 ---
 
 ## 📁 Project Structure
+```bash
 Travel-Booking-System-DevSecOps/
 ├── backend/ # Backend services & APIs
 ├── frontend/ # Frontend application
