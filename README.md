@@ -107,19 +107,17 @@ Travel-Booking-System-DevSecOps/
    
 ## ☸ Kubernetes Deployment
 
-1.The project includes Kubernetes manifests for:
+The project includes Kubernetes manifests for:
 
-2.Namespace isolation
+1. Namespace isolation  
+2. Frontend & backend deployments  
+3. ClusterIP services for internal communication  
+4. Ingress for external access  
 
-3.Frontend & backend deployments
+### Deployment Command
+```bash
+kubectl apply -f k8s/
 
-4.ClusterIP services for internal communication
-
-5.Ingress for external access
-
-6.Deployment can be executed via:
-  ```bash
-  kubectl apply -f k8s/
 
 
 ## 🔍 Security Practices Implemented
