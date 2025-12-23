@@ -103,10 +103,22 @@ Travel-Booking-System-DevSecOps/
    ```bash
    git clone https://github.com/arushsingh0604/Travel-Booking-System-DevSecOps.git
    cd Travel-Booking-System-DevSecOps
-   cp .env.example .env
-   docker-compose up --build
-   http://localhost:3000
+   ```
    
+2. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Run the application**
+   ```bash
+   docker-compose up --build
+   ```
+4. **Access the application**
+   ```bash
+   http://localhost:3000
+   ```
+
 ## ☸ Kubernetes Deployment
 
 The project includes Kubernetes manifests for:
