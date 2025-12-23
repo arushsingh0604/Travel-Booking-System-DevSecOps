@@ -135,7 +135,7 @@ kubectl apply -f k8s/
 
 
 
-### 🔍 Security Practices Implemented
+## 🔍 Security Practices Implemented
 
 1.Static Application Security Testing (SAST)
 
@@ -149,7 +149,7 @@ kubectl apply -f k8s/
 
 6.Shift-Left security enforcement
 
-### 📈 Why This Project Matters
+## 📈 Why This Project Matters
 
 This project reflects real enterprise DevSecOps workflows, not toy examples.
 
@@ -165,7 +165,7 @@ It demonstrates:
 
 Perfect for DevOps / DevSecOps / Cloud Engineer roles.
 
-### 🚧 Future Enhancements
+## 🚧 Future Enhancements
 
 Dynamic Application Security Testing (DAST)
 
@@ -173,7 +173,7 @@ Cloud deployment (AWS EKS / Azure AKS)
 
 Monitoring with Prometheus & Grafana
 
-### 🧑‍💻 Author
+## 🧑‍💻 Author
 
 Arush Singh
 DevSecOps | Cloud | CI/CD | Kubernetes
