@@ -104,7 +104,8 @@ Travel-Booking-System-DevSecOps/
    cp .env.example .env
    docker-compose up --build
    http://localhost:3000
-☸ Kubernetes Deployment
+   
+## ☸ Kubernetes Deployment
 
 The project includes Kubernetes manifests for:
 
@@ -120,7 +121,7 @@ Deployment can be executed via:
 
 kubectl apply -f k8s/
 
-🔍 Security Practices Implemented
+## 🔍 Security Practices Implemented
 
 Static Application Security Testing (SAST)
 
@@ -134,7 +135,7 @@ Secure credential handling in Jenkins
 
 Shift-Left security enforcement
 
-📈 Why This Project Matters
+## 📈 Why This Project Matters
 
 This project reflects real enterprise DevSecOps workflows, not toy examples.
 
@@ -150,7 +151,7 @@ Security-driven engineering mindset
 
 Perfect for DevOps / DevSecOps / Cloud Engineer roles.
 
-🚧 Future Enhancements
+## 🚧 Future Enhancements
 
 Dynamic Application Security Testing (DAST)
 
@@ -162,7 +163,7 @@ Policy-as-Code enforcement
 
 Blue-Green & Canary deployments
 
-🧑‍💻 Author
+## 🧑‍💻 Author
 
 Arush Singh
 DevSecOps | Cloud | CI/CD | Kubernetes
