@@ -119,6 +119,7 @@ The project includes Kubernetes manifests for:
 ### Deployment Command
 ```bash
 kubectl apply -f k8s/
+```
 
 
 
