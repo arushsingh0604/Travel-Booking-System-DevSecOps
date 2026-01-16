@@ -1,11 +1,11 @@
-# 🚀 TravelEase – Secure Travel Booking Platform (DevSecOps CI/CD)
+#  TravelEase – Secure Travel Booking Platform (DevSecOps CI/CD)
 
 TravelEase is a **full-stack travel booking application** designed and delivered using **modern DevSecOps principles**.  
 This project demonstrates **end-to-end CI/CD automation**, **containerization**, **security-first pipelines**, and **cloud-ready deployment**, making it ideal for showcasing real-world DevSecOps skills to recruiters.
 
 ---
 
-## 📌 Project Objective
+##  Project Objective
 
 To build and deploy a **secure, scalable travel booking platform** with:
 - Automated CI/CD pipelines
@@ -15,7 +15,7 @@ To build and deploy a **secure, scalable travel booking platform** with:
 
 ---
 
-## 🧠 Key Highlights (Recruiter Focus)
+##  Key Highlights (Recruiter Focus)
 
 - ✅ End-to-end **DevSecOps pipeline** using Jenkins
 - ✅ **Dockerized frontend & backend**
@@ -26,7 +26,7 @@ To build and deploy a **secure, scalable travel booking platform** with:
 
 ---
 
-## 🛠 Application Features
+##  Application Features
 
 - User registration & authentication
 - Flight, hotel, and travel package booking
@@ -37,7 +37,7 @@ To build and deploy a **secure, scalable travel booking platform** with:
 
 ---
 
-## 🔐 DevSecOps Pipeline Overview
+##  DevSecOps Pipeline Overview
 
 The CI/CD pipeline is designed with **security at every stage**:
 
@@ -51,11 +51,11 @@ The CI/CD pipeline is designed with **security at every stage**:
 7. **Kubernetes Manifest Validation**
 8. **Automated Deployment**
 
-🔁 Any security failure **blocks the pipeline**, enforcing strict quality gates.
+ Any security failure **blocks the pipeline**, enforcing strict quality gates.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 ```bash
 Travel-Booking-System-DevSecOps/
 ├── backend/ # Backend services & APIs
@@ -73,7 +73,7 @@ Travel-Booking-System-DevSecOps/
 
 ---
 
-## 🧰 Technology Stack
+##  Technology Stack
 
 | Category | Tools & Technologies |
 |--------|---------------------|
@@ -87,7 +87,7 @@ Travel-Booking-System-DevSecOps/
 
 ---
 
-## ⚙️ How to Run Locally
+##  How to Run Locally
 
 ### Prerequisites
 - Docker
@@ -97,7 +97,7 @@ Travel-Booking-System-DevSecOps/
 
 ---
 
-### 🔧 Steps
+###  Steps
 
 1. **Clone the repository**
    ```bash
@@ -119,7 +119,7 @@ Travel-Booking-System-DevSecOps/
    http://localhost:3000
    ```
 
-## ☸ Kubernetes Deployment
+##  Kubernetes Deployment
 
 The project includes Kubernetes manifests for:
 
@@ -135,7 +135,7 @@ kubectl apply -f k8s/
 
 
 
-## 🔍 Security Practices Implemented
+##  Security Practices Implemented
 
 1.Static Application Security Testing (SAST)
 
@@ -149,7 +149,7 @@ kubectl apply -f k8s/
 
 6.Shift-Left security enforcement
 
-## 📈 Why This Project Matters
+##  Why This Project Matters
 
 This project reflects real enterprise DevSecOps workflows, not toy examples.
 
@@ -165,7 +165,7 @@ It demonstrates:
 
 Perfect for DevOps / DevSecOps / Cloud Engineer roles.
 
-## 🚧 Future Enhancements
+##  Future Enhancements
 
 Dynamic Application Security Testing (DAST)
 
@@ -173,7 +173,7 @@ Cloud deployment (AWS EKS / Azure AKS)
 
 Monitoring with Prometheus & Grafana
 
-## 🧑‍💻 Author
+##  Author
 
 Arush Singh
 DevSecOps | Cloud | CI/CD | Kubernetes
