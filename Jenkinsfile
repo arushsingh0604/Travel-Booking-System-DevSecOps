@@ -27,21 +27,21 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo "📥 Checking out code..."
+                echo " Checking out code..."
                 git branch: 'main', url: 'https://github.com/Msocial123/Travel-Booking-System.git'
             }
         }
 
         stage('Unit Tests (Backend)') {
             steps {
-                echo "🧪 Running Backend unit tests (Node.js)..."
+                echo " Running Backend unit tests (Node.js)..."
                 sh "cd backend && npm ci && npm test"
             }
         }
 
         stage('SonarQube Analysis (Backend)') {
             steps {
-                echo "🔍 Running SonarQube analysis on backend..."
+                echo " Running SonarQube analysis on backend..."
                 withSonarQubeEnv(env.SONARQUBE_ENV) {
                     sh """
                         cd backend && sonar-scanner \
@@ -66,28 +66,28 @@ pipeline {
 
         stage('Build & Tag Docker Images') {
             steps {
-                echo "🐳 Building Backend Docker image..."
+                echo " Building Backend Docker image..."
                 sh "docker build --no-cache -t ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./backend"
                 
-                echo "🏷 Tagging Backend image for ECR..."
+                echo " Tagging Backend image for ECR..."
                 sh "docker tag ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
 
-                echo "🏗️ Building Frontend Docker image..."
+                echo " Building Frontend Docker image..."
                 sh "docker build --no-cache -t ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ./frontend"
                 
-                echo "🏷 Tagging Frontend image for ECR..."
+                echo " Tagging Frontend image for ECR..."
                 sh "docker tag ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
             }
         }
 
         stage('Security Scan - Trivy') {
             steps {
-                echo "🛡 Running Trivy scan on Backend image..."
+                echo " Running Trivy scan on Backend image..."
                 sh """
                     trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} || true
                 """
                 
-                echo "🛡 Running Trivy scan on Frontend image..."
+                echo " Running Trivy scan on Frontend image..."
                 sh """
                     trivy image --exit-code 0 --severity CRITICAL,HIGH --ignore-unfixed ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} || true
                 """
@@ -97,26 +97,26 @@ pipeline {
         stage('Push to ECR & DockerHub') {
             steps {
                 script {
-                    echo "🔒 Logging in to AWS ECR..."
+                    echo " Logging in to AWS ECR..."
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_CREDS']]) {
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}"
                     }
 
-                    echo "🔒 Logging in to DockerHub..."
+                    echo " Logging in to DockerHub..."
                     withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                     }
 
-                    echo "🚀 Pushing Backend image to ECR..."
+                    echo " Pushing Backend image to ECR..."
                     sh "docker push ${BACKEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
                     
-                    echo "🚀 Pushing Backend image to DockerHub..."
+                    echo " Pushing Backend image to DockerHub..."
                     sh "docker push ${BACKEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
                     
-                    echo "🚀 Pushing Frontend image to ECR..."
+                    echo " Pushing Frontend image to ECR..."
                     sh "docker push ${FRONTEND_ECR_REPO}:${DOCKER_IMAGE_TAG}"
                     
-                    echo "🚀 Pushing Frontend image to DockerHub..."
+                    echo " Pushing Frontend image to DockerHub..."
                     sh "docker push ${FRONTEND_DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
                 }
             }
@@ -124,7 +124,7 @@ pipeline {
 
         stage('Compose Validation (Optional)') {
             steps {
-                echo "🧩 Validating docker-compose.yml..."
+                echo " Validating docker-compose.yml..."
                 sh "docker-compose config || true"
             }
         }
@@ -132,7 +132,7 @@ pipeline {
         stage('Kubernetes Deploy') {
             steps {
                 script {
-                    echo "🚢 Preparing and deploying manifests to Kubernetes (Declarative Method)..."
+                    echo " Preparing and deploying manifests to Kubernetes (Declarative Method)..."
 
                     sh 'mkdir -p processed_k8s'
                     
@@ -149,10 +149,10 @@ pipeline {
 
                     withKubeConfig([credentialsId:'KUBE_CONFIG_FILE']) {
                         sh """
-                            echo '📄 Applying Kubernetes Manifests...'
+                            echo ' Applying Kubernetes Manifests...'
                             kubectl apply -f processed_k8s/
 
-                            echo '🔍 Checking rollout status...'
+                            echo ' Checking rollout status...'
                             kubectl rollout status deployment/tbs-backend-deployment --namespace default
                             kubectl rollout status deployment/tbs-frontend-deployment --namespace default
                         """
@@ -164,14 +164,14 @@ pipeline {
 
     post {
         always {
-            echo '📦 Pipeline completed.'
+            echo ' Pipeline completed.'
             sh "docker logout"
         }
         success {
-            echo '✅ All checks passed.'
+            echo ' All checks passed.'
             emailext(
                 to: 'arushsingh0604@gmail.com',
-                subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                subject: " SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <p>Hi Arush,</p>
                     <p>The pipeline for <b>${env.JOB_NAME}</b> completed successfully.</p>
@@ -189,10 +189,10 @@ pipeline {
             )
         }
         failure {
-            echo '❌ Pipeline failed.'
+            echo ' Pipeline failed.'
             emailext(
                 to: 'arushsingh0604@gmail.com',
-                subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                subject: " FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <p>Hi Arush,</p>
                     <p>The pipeline for <b>${env.JOB_NAME}</b> failed.</p>
